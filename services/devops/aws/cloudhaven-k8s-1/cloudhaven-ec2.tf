@@ -8,10 +8,10 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-data "aws_subnet" "private_subnet" {
-  id = "subnet-08e4f7a91163d50c7" #need to find way around
+# data "aws_subnet" "private_subnet" {
+#   id = "subnet-08e4f7a91163d50c7" #need to find way around
 
-}
+# }
 
 
 module "cloudhaven-ec2" {
@@ -20,8 +20,11 @@ module "cloudhaven-ec2" {
   name          = "cloudhaven-ec2-instance"
   iam_role_name = "cloudhaven-ec2-instance-role"
   ami_id        = data.aws_ami.ubuntu.id
-  subnet        = [data.aws_subnet.private_subnet.id]
+  subnet        = [data.aws_subnet.subnet-public.id]
   instance_type = "t3.medium"
+  security_group_ids = [ ]
+
+  create_eip = false
 
 
 }

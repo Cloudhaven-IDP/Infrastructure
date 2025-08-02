@@ -4,7 +4,7 @@ terraform {
     encrypt        = true
     bucket         = "cloudhaven-tf-state"
     dynamodb_table = "devops-tf-state-lock"
-    key            = "services/devops/aws/vpc"
+    key            = "services/svc-devops/aws/vpc"
     region         = "us-east-1"
   }
   required_providers {

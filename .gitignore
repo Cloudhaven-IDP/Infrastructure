@@ -1,0 +1,66 @@
+awscliv2.zip
+services/svc-devops/aws/state/terraform.tfstate.backup
+
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.egg-info/
+*.egg
+*.env
+.env
+.venv/
+venv/
+ENV/
+env/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+*.sqlite3
+*.log
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pytest
+.cache
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+
+# coverage
+.coverage
+htmlcov/
+.coverage.*
+
+# virtualenv + poetry
+poetry.lock
+.poetry/
+
+# ---- Terraform ----
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+.crash
+*.tfplan
+*.backup
+terraform.tfvars
+terraform.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# ---- System Files ----
+.DS_Store
+Thumbs.db
+
+# ---- IDEs ----
+.vscode/
+.idea/
+*.swp

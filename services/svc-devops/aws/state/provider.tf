@@ -15,7 +15,7 @@ provider "aws" {
 }
 
 locals {
-  config = yamldecode(file("${path.module}/../../config.yaml"))
+  config = yamldecode(file("${path.module}/../config.yaml"))
   default_tags = {
     Service     = local.config.Service
     Project     = local.config.Project

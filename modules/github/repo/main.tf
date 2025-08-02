@@ -49,6 +49,8 @@ resource "github_repository_file" "codeowners" {
     reviewer_teams = var.reviewer_teams
   })
 
+  commit_message = "Add CODEOWNERS file"
+
   lifecycle {
     ignore_changes = [content]
   }

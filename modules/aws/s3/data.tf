@@ -20,8 +20,8 @@ data "aws_iam_policy_document" "default_policy" {
 
 
 data "aws_iam_policy_document" "combined" {
-  source_policy_documents = [
+  source_policy_documents = compact([
     data.aws_iam_policy_document.default_policy.json,
-    var.bucket_policy
-  ]
+    try(var.bucket_policy, "")
+  ])
 }

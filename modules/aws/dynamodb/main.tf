@@ -1,9 +1,3 @@
-data "aws_caller_identity" "current" {}
-
-locals {
-  table_name = join("-", compact([var.service, var.name]))
-}
-
 module "dynamodb_table" {
   source  = "terraform-aws-modules/dynamodb-table/aws"
   version = "~> 4.0"

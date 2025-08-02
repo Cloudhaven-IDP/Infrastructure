@@ -2,7 +2,7 @@ module "state" {
   source      = "../../../../modules/aws/s3"
 
 
-  bucket_name = "my-unique-s3-bucket-name"
+  bucket_name = "cloudhaven-tf-state"
   bucket_policy = data.aws_iam_policy_document.tf_backend.json
 
 }

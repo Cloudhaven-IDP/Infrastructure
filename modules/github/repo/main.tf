@@ -1,0 +1,87 @@
+resource "github_repository" "this" {
+  name        = var.name
+  description = var.description
+  visibility  = var.visibility
+  auto_init   = true
+  delete_branch_on_merge = true
+
+  lifecycle {
+    ignore_changes = [
+      auto_init,
+      homepage_url,
+      description,
+      has_issues,
+      has_downloads,
+      has_discussions,
+      has_wiki,
+      has_projects,
+      topics,
+      vulnerability_alerts,
+      pages,
+      template,
+    ]
+  }
+}
+
+resource "github_branch" "this" {
+  repository = github_repository.this.name
+  branch     = var.default_branch
+
+  depends_on = [github_repository.this]
+}
+
+resource "github_branch_default" "this" {
+  count      = var.default_branch == "main" ? 1 : 0
+  repository = github_repository.this.name
+  branch     = var.default_branch
+
+  depends_on = [github_branch.this]
+}
+
+resource "github_repository_file" "codeowners" {
+  count               = var.create_codeowners ? 1 : 0
+  repository          = github_repository.this.name
+  file                = ".github/CODEOWNERS"
+  branch              = var.default_branch
+  overwrite_on_create = true
+
+  content = templatefile("${path.module}/codeowners.tmpl", {
+    reviewer_teams = var.reviewer_teams
+  })
+
+  lifecycle {
+    ignore_changes = [content]
+  }
+
+  depends_on = [github_repository.this]
+}
+
+resource "github_branch_protection" "this" {
+  repository_id = github_repository.this.name
+  pattern       = var.default_branch
+
+  required_pull_request_reviews {
+  dismiss_stale_reviews           = true
+  required_approving_review_count = 1
+  require_code_owner_reviews      = true
+  }
+
+
+  enforce_admins = false
+
+  required_status_checks {
+    strict   = true
+    contexts = []
+  }
+
+  depends_on = [github_repository_file.codeowners, github_repository.this]
+}
+
+resource "github_team_repository" "team_access" {
+  for_each   = { for t in var.teams : t.id => t }
+  team_id    = each.value.id
+  repository = github_repository.this.name
+  permission = each.value.permission
+
+  depends_on = [github_repository.this]
+}

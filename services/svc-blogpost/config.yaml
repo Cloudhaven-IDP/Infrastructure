@@ -1,0 +1,3 @@
+Service: blog
+Project: cloudhaven
+ManagedBy: terraform

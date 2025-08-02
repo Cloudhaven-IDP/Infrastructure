@@ -1,8 +1,8 @@
 resource "aws_identitystore_group" "this" {
-  for_each           = { for name in var.group_names : name => name }
-  identity_store_id  = local.identity_store_id
-  display_name       = each.value
-  description        = "Group for ${each.value}"
+  for_each          = { for name in var.group_names : name => name }
+  identity_store_id = local.identity_store_id
+  display_name      = each.value
+  description       = "Group for ${each.value}"
 }
 
 resource "aws_identitystore_user_group_membership" "this" {
@@ -59,9 +59,9 @@ resource "aws_ssoadmin_customer_managed_policy_attachment" "this" {
 resource "aws_ssoadmin_permission_set_inline_policy" "deny_ssm" {
   count = var.access_restricted_ssm ? 0 : 1
 
-  inline_policy       = data.aws_iam_policy_document.deny_restricted[0].json
-  instance_arn        = local.instance_arn
-  permission_set_arn  = aws_ssoadmin_permission_set.this.arn
+  inline_policy      = data.aws_iam_policy_document.deny_restricted[0].json
+  instance_arn       = local.instance_arn
+  permission_set_arn = aws_ssoadmin_permission_set.this.arn
 }
 
 resource "aws_ssoadmin_account_assignment" "group_assignment" {

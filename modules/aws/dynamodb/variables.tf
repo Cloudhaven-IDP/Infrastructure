@@ -9,7 +9,7 @@ variable "service" {
   description = "Service that this DynamoDB table belongs to"
   type        = string
   default     = null
-  
+
 }
 variable "generate_access_policies" {
   description = "Whether to generate read/write IAM policies"

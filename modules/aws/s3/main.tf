@@ -23,7 +23,7 @@ module "bucket" {
   attach_deny_insecure_transport_policy = true
   attach_require_latest_tls_policy      = true
 
-  lifecycle_rule = var.lifecycle_rule
+  lifecycle_rule                         = var.lifecycle_rule
   transition_default_minimum_object_size = var.transition_default_minimum_object_size
   intelligent_tiering                    = var.intelligent_tiering
 

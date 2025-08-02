@@ -4,7 +4,7 @@ terraform {
     encrypt        = true
     bucket         = "cloudhaven-tf-state"
     dynamodb_table = "devops-tf-state-lock"
-    key            = "services/svc-devops/aws/vpc"
+    key            = "services/devops/aws/cloudhaven-k8s-1"
     region         = "us-east-1"
   }
   required_providers {
@@ -25,7 +25,7 @@ provider "aws" {
 }
 
 locals {
-  config    = yamldecode(file("${path.module}/../config.yaml"))
+  config = yamldecode(file("${path.module}/../config.yaml"))
 
   default_tags = {
     region    = local.config.Region

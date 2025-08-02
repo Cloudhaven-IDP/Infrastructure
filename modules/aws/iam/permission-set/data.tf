@@ -14,9 +14,9 @@ data "aws_iam_policy_document" "deny_restricted" {
   count = var.access_restricted_ssm ? 0 : 1
 
   statement {
-    sid    = "PathDeny"
-    effect = "Deny"
-    actions = ["*"]
+    sid       = "PathDeny"
+    effect    = "Deny"
+    actions   = ["*"]
     resources = ["arn:aws:ssm:*:*:parameter/restricted/*"]
   }
 }

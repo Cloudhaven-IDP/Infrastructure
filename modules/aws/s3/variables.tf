@@ -6,20 +6,20 @@
 
 
 variable "bucket_name" {
-    description = "The name of the S3 bucket"
-    type = string
+  description = "The name of the S3 bucket"
+  type        = string
 }
 
 variable "policy_name" {
   description = "The name of the IAM policy to create for the S3 bucket"
   type        = string
   default     = null
-  
+
 }
 
 variable "bucket_policy" {
-  type    = string
-  default = "{}"
+  type        = string
+  default     = "{}"
   description = "value of the bucket policy in JSON format. If not provided, no bucket policy will be applied."
 }
 

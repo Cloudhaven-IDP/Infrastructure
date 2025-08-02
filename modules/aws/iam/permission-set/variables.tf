@@ -4,14 +4,14 @@ variable "group_names" {
 }
 
 variable "group_memberships" {
-  type = map(list(string))
+  type        = map(list(string))
   description = <<EOT
   A map of group names to lists of user names to assign.
   Example: {
     "Cloudhaven-Admins" = ["bazit"]
   }
   EOT
-  default = {}
+  default     = {}
 }
 
 variable "permission_set_name" {
@@ -20,23 +20,23 @@ variable "permission_set_name" {
 }
 
 variable "description" {
-  type        = string
-  default     = ""
+  type    = string
+  default = ""
 }
 
 variable "session_duration" {
-  type        = string
-  default     = "PT1H"
+  type    = string
+  default = "PT1H"
 }
 
 variable "relay_state" {
-  type        = string
-  default     = null
+  type    = string
+  default = null
 }
 
 variable "tags" {
-  type        = map(string)
-  default     = {}
+  type    = map(string)
+  default = {}
 }
 
 variable "account_ids" {
@@ -45,13 +45,13 @@ variable "account_ids" {
 }
 
 variable "aws_managed_policies" {
-  type        = list(string)
-  default     = []
+  type    = list(string)
+  default = []
 }
 
 variable "customer_managed_policies" {
-  type        = list(string)
-  default     = []
+  type    = list(string)
+  default = []
 
   validation {
     condition     = alltrue([for p in var.customer_managed_policies : can(regex("[\\w+=,.@-]+", p))])
@@ -60,11 +60,11 @@ variable "customer_managed_policies" {
 }
 
 variable "access_restricted_ssm" {
-  type        = bool
-  default     = false
+  type    = bool
+  default = false
 }
 
 variable "inline_policy" {
-  type        = string
-  default     = null
+  type    = string
+  default = null
 }

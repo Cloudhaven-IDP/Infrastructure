@@ -2,7 +2,9 @@ locals {
   endpoints = [
     "s3",
     "dynamodb",
-    "apigateway"
+    "apigateway",
+    "ssm",
+    "ec2"
   ]
 }
 

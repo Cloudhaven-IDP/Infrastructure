@@ -53,7 +53,7 @@ curl -sSL "https://github.com/containerd/nerdctl/releases/download/v${NERDCTL_VE
   | tar -xz -C /usr/local/bin
 
 # Install SSM Agent
-snap install amazon-ssm-agent --classic
+sudo snap install amazon-ssm-agent --classic
 systemctl enable snap.amazon-ssm-agent.amazon-ssm-agent.service
 systemctl start snap.amazon-ssm-agent.amazon-ssm-agent.service
 

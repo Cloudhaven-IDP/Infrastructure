@@ -1,0 +1,21 @@
+server:
+  service:
+    type: LoadBalancer
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb
+      service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+
+configs:
+  secret:
+    argocdServerAdminPassword: "" # leave empty to use default auto-generated password
+
+configs:
+  cm:
+    admin.enabled: true
+    admin.apiKey: true
+    application.instanceLabelKey: argocd.argoproj.io/instance
+    exec.enabled: false
+    server.rbac.log.enforce.enable: false
+    timeout:
+      hard.reconciliation: 0s
+      reconciliation: 180s

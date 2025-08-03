@@ -22,7 +22,7 @@ variable "subnet" {
 variable "iam_role_name" {
   description = "IAM role name to attach to the EC2 instance profile"
   type        = string
-  default = null
+  default     = null
 }
 
 variable "instance_profile_name" {
@@ -67,26 +67,26 @@ variable "create_sg_rules" {
   description = "Flag to create security group rules"
   type        = bool
   default     = true
-  
+
 }
 
 variable "ports" {
   description = "List of ports for the NLB listeners"
   type        = list(number)
   default     = [80]
-  
+
 }
 
 variable "nlb_security_group_id" {
-    description = "Security group ID for the NLB"
-    type        = string
-    default     = null
-  
+  description = "Security group ID for the NLB"
+  type        = string
+  default     = null
+
 }
 
 variable "create_eip" {
   description = "Flag to create an Elastic IP for the EC2 instance"
   type        = bool
   default     = true
-  
+
 }

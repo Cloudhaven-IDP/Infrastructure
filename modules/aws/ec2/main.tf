@@ -16,6 +16,12 @@ module "ec2_instance" {
   user_data              = var.user_data_script != null ? var.user_data_script : local.user_data_script
   monitoring             = var.enable_monitoring
   create_eip = var.create_eip
+  # ebs_block_device = var.create_ebs_block_device ? [{
+  #   device_name           = "/dev/sda1"
+  #   volume_size           = var.ebs_volume_size
+  #   volume_type           = var.ebs_volume_type
+  #   delete_on_termination = true
+  # }] : []
 
   tags = merge({
     Name = var.name

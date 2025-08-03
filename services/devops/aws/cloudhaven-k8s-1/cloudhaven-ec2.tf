@@ -18,12 +18,12 @@ data "aws_subnet" "subnet-private" {
 module "cloudhaven-ec2-master" {
   source = "../../../../modules/aws/ec2/"
 
-  name          = "cloudhaven-ec2-instance"
-  iam_role_name = "cloudhaven-ec2-instance-role"
-  ami_id        = data.aws_ami.ubuntu.id
-  subnet        = [data.aws_subnet.subnet-private.id]
-  instance_type = "t4g.small"
-  security_group_ids = [ "sg-0982ce650526b7543"]
+  name               = "cloudhaven-ec2-instance"
+  iam_role_name      = "cloudhaven-ec2-instance-role"
+  ami_id             = data.aws_ami.ubuntu.id
+  subnet             = [data.aws_subnet.subnet-private.id]
+  instance_type      = "t4g.small"
+  security_group_ids = ["sg-0982ce650526b7543"]
 
   create_eip = false
 
@@ -34,12 +34,12 @@ module "cloudhaven-ec2-master" {
 module "cloudhaven-ec2-slave" {
   source = "../../../../modules/aws/ec2/"
 
-  name          = "cloudhaven-ec2-instance-2"
-  iam_role_name = "cloudhaven-ec2-instance-role-2"
-  ami_id        = data.aws_ami.ubuntu.id
-  subnet        = [data.aws_subnet.subnet-private.id]
-  instance_type = "t4g.xlarge"
-  security_group_ids = [ "sg-0982ce650526b7543" ]
+  name               = "cloudhaven-ec2-instance-2"
+  iam_role_name      = "cloudhaven-ec2-instance-role-2"
+  ami_id             = data.aws_ami.ubuntu.id
+  subnet             = [data.aws_subnet.subnet-private.id]
+  instance_type      = "t4g.xlarge"
+  security_group_ids = ["sg-0982ce650526b7543"]
 
   create_eip = false
 

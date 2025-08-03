@@ -40,12 +40,12 @@ variable "create_eips" {
   description = "Whether to create Elastic IPs for the NLB"
   type        = bool
   default     = true
-  
+
 }
 
 variable "enable_cross_zone_load_balancing" {
   description = "Enable cross-zone load balancing for the NLB"
   type        = bool
   default     = true
-  
+
 }

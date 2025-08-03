@@ -15,7 +15,7 @@ module "ec2_instance" {
   vpc_security_group_ids = var.security_group_ids
   user_data              = var.user_data_script != null ? var.user_data_script : local.user_data_script
   monitoring             = var.enable_monitoring
-  create_eip = var.create_eip
+  create_eip             = var.create_eip
   # ebs_block_device = var.create_ebs_block_device ? [{
   #   device_name           = "/dev/sda1"
   #   volume_size           = var.ebs_volume_size

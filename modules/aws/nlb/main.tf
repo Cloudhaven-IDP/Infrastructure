@@ -11,9 +11,9 @@ resource "aws_eip" "this" {
 }
 
 resource "aws_lb" "this" {
-  name               = "${var.name}-lb"
-  internal           = var.internal
-  load_balancer_type = var.type
+  name                             = "${var.name}-lb"
+  internal                         = var.internal
+  load_balancer_type               = var.type
   enable_cross_zone_load_balancing = var.enable_cross_zone_load_balancing
 
   dynamic "subnet_mapping" {

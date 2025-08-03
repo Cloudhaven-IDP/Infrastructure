@@ -12,5 +12,5 @@ module "cloudhaven-nlb" {
 
   tags = {
     Name = "cloudhaven-nlb"
-  } 
+  }
 }

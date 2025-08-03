@@ -1,7 +1,7 @@
 output "namespace" {
   description = "The namespace where ArgoCD is deployed"
-  value       = helm_release.argocd.namespace   
-  
+  value       = helm_release.argocd.namespace
+
 }
 
 output "release_name" {

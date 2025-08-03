@@ -21,8 +21,8 @@ resource "aws_vpc_endpoint" "this" {
   service_name      = "com.amazonaws.${local.config.Region}.${each.key}"
   vpc_endpoint_type = contains(local.gateway_endpoints, each.key) ? "Gateway" : "Interface"
 
-  subnet_ids         = contains(local.gateway_endpoints, each.key) ? null : module.cloudhaven-vpc.private_subnets
-  security_group_ids = contains(local.gateway_endpoints, each.key) ? null : [aws_security_group.vpc_endpoints.id]
+  subnet_ids          = contains(local.gateway_endpoints, each.key) ? null : module.cloudhaven-vpc.private_subnets
+  security_group_ids  = contains(local.gateway_endpoints, each.key) ? null : [aws_security_group.vpc_endpoints.id]
   private_dns_enabled = contains(local.gateway_endpoints, each.key) ? null : true
 
   tags = {

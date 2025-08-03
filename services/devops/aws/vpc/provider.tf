@@ -25,7 +25,7 @@ provider "aws" {
 }
 
 locals {
-  config    = yamldecode(file("${path.module}/../config.yaml"))
+  config = yamldecode(file("${path.module}/../config.yaml"))
 
   default_tags = {
     region    = local.config.Region

@@ -1,5 +1,5 @@
 locals {
-# add new security group rules here
+  # add new security group rules here
   port_map = {
     ssh = {
       ports       = [22]
@@ -63,13 +63,13 @@ module "cloudhaven-vpc" {
 resource "aws_security_group_rule" "cloudhaven-ec2-sg_ingress" {
   for_each = { for rule in local.sg_rules : "${rule.name}-${rule.port}" => rule }
 
-  type                     = "ingress"
-  from_port                = each.value.port
-  to_port                  = each.value.port
-  protocol                 = "tcp"
-  description              = each.value.description
-  security_group_id        = "sg-0982ce650526b7543"
-  self                   = true
+  type              = "ingress"
+  from_port         = each.value.port
+  to_port           = each.value.port
+  protocol          = "tcp"
+  description       = each.value.description
+  security_group_id = "sg-0982ce650526b7543"
+  self              = true
 }
 
 
@@ -86,6 +86,6 @@ resource "aws_security_group_rule" "cloudhaven-ec2-sg_egress" {
 
 import {
   id = "sg-0982ce650526b7543_egress_tcp_0_65535_0.0.0.0/0"
-  to   = aws_security_group_rule.cloudhaven-ec2-sg_egress
+  to = aws_security_group_rule.cloudhaven-ec2-sg_egress
 }
 

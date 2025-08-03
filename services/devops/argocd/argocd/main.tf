@@ -2,7 +2,7 @@ module "argocd" {
   source = "../../../../modules/argocd/argocd"
 
   values = [file("${path.module}/values.yaml")]
-  
+
 }
 
 # provider "argocd" {

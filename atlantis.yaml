@@ -4,44 +4,111 @@ parallel_plan: true
 parallel_apply: true
 
 projects:
-  - &default
+  - name: services-devops-atlantis
+    dir: services/devops/atlantis
+    terraform_version: "1.6.6"
     autoplan:
       enabled: true
-      when_modified: ["*.tf", "*.yaml"]
-    terraform_version: "1.12.0"
+      when_modified:
+        - "**/*.tf"
+        - "**/*.tfvars"
+        - "atlantis.yaml"
+    workflow: default
 
-  - <<: *default
-    name: services-devops-atlantis
-    dir: services/devops/atlantis
-
-  - <<: *default
-    name: services-devops-argocd-argocd
+  - name: services-devops-argocd-argocd
     dir: services/devops/argocd/argocd
+    terraform_version: "1.6.6"
+    autoplan:
+      enabled: true
+      when_modified:
+        - "**/*.tf"
+        - "**/*.tfvars"
+        - "atlantis.yaml"
+    workflow: default
 
-  - <<: *default
-    name: services-devops-cloudflare
+  - name: services-devops-cloudflare
     dir: services/devops/cloudflare
+    terraform_version: "1.6.6"
+    autoplan:
+      enabled: true
+      when_modified:
+        - "**/*.tf"
+        - "**/*.tfvars"
+        - "atlantis.yaml"
+    workflow: default
 
-  - <<: *default
-    name: services-devops-twingate
+  - name: services-devops-twingate
     dir: services/devops/twingate
+    terraform_version: "1.6.6"
+    autoplan:
+      enabled: true
+      when_modified:
+        - "**/*.tf"
+        - "**/*.tfvars"
+        - "atlantis.yaml"
+    workflow: default
 
-  - <<: *default
-    name: services-devops-aws-vpc
+  - name: services-devops-aws-vpc
     dir: services/devops/aws/vpc
+    terraform_version: "1.6.6"
+    autoplan:
+      enabled: true
+      when_modified:
+        - "**/*.tf"
+        - "**/*.tfvars"
+        - "atlantis.yaml"
+    workflow: default
 
-  - <<: *default
-    name: services-devops-aws-cloudhaven-k8s-1
+  - name: services-devops-aws-cloudhaven-k8s-1
     dir: services/devops/aws/cloudhaven-k8s-1
+    terraform_version: "1.6.6"
+    autoplan:
+      enabled: true
+      when_modified:
+        - "**/*.tf"
+        - "**/*.tfvars"
+        - "atlantis.yaml"
+    workflow: default
 
-  - <<: *default
-    name: services-devops-github-repos
+  - name: services-devops-github-repos
     dir: services/devops/github/repos
+    terraform_version: "1.6.6"
+    autoplan:
+      enabled: true
+      when_modified:
+        - "**/*.tf"
+        - "**/*.tfvars"
+        - "atlantis.yaml"
+    workflow: default
 
-  - <<: *default
-    name: services-devops-github-teams
+  - name: services-devops-github-teams
     dir: services/devops/github/teams
+    terraform_version: "1.6.6"
+    autoplan:
+      enabled: true
+      when_modified:
+        - "**/*.tf"
+        - "**/*.tfvars"
+        - "atlantis.yaml"
+    workflow: default
 
-  - <<: *default
-    name: services-devops-aws-state
+  - name: services-devops-aws-state
     dir: services/devops/aws/state
+    terraform_version: "1.6.6"
+    autoplan:
+      enabled: true
+      when_modified:
+        - "**/*.tf"
+        - "**/*.tfvars"
+        - "atlantis.yaml"
+    workflow: default
+
+workflows:
+  default:
+    plan:
+      steps:
+        - init
+        - plan
+    apply:
+      steps:
+        - apply

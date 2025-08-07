@@ -1,15 +1,14 @@
 server:
+  sserver:
   service:
     type: LoadBalancer
-    annotations:
-      service.beta.kubernetes.io/aws-load-balancer-type: nlb
-      service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
-
+    ports:
+      http: 80
+      https: 443
 configs:
   secret:
     argocdServerAdminPassword: "" # leave empty to use default auto-generated password
 
-configs:
   cm:
     admin.enabled: true
     admin.apiKey: true

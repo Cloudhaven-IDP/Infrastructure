@@ -12,11 +12,13 @@ variable "instance_type" {
 variable "ami_id" {
   description = "AMI ID to launch the instance"
   type        = string
+  default     = null
 }
 
 variable "subnet" {
-  description = "List of private subnet IDs to deploy the instance into"
-  type        = list(string)
+  description = "The subnet ID to launch the EC2 instance in."
+  type        = string
+  default     = "subnet-08e4f7a91163d50c7"
 }
 
 variable "iam_role_name" {

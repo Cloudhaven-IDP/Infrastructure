@@ -1,0 +1,25 @@
+vcsSecretName: atlantis-vcs
+
+webhookSecret:
+  stringFromSecret:
+    secretName: atlantis-webhook-secret
+    secretKey: webhook-secret
+
+
+github:
+  user: "cloudhaven-atlantis-bot"
+  hostname: "github.com"
+
+repoConfig: |
+  repos:
+    - id: /.*/
+      branch: /.*/
+      workflow: default
+      apply_requirements: [approved, mergeable]
+      allowed_overrides: [apply_requirements, workflow]
+      allow_custom_workflows: true
+
+service:
+  type: LoadBalancer
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internal

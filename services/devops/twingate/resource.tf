@@ -3,6 +3,11 @@ resource "twingate_remote_network" "aws" {
 
 }
 
+resource "twingate_remote_network" "aws" {
+  name = "aws_remote"
+
+}
+
 resource "twingate_resource" "this" {
   for_each = { for r in local.twingate_resources : r.name => r }
 

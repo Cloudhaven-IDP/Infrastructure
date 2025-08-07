@@ -1,0 +1,47 @@
+version: 3
+automerge: true
+parallel_plan: true
+parallel_apply: true
+
+projects:
+  - &default
+    autoplan:
+      enabled: true
+      when_modified: ["*.tf", "*.yaml"]
+    terraform_version: "1.12.0"
+
+  - <<: *default
+    name: services-devops-atlantis
+    dir: services/devops/atlantis
+
+  - <<: *default
+    name: services-devops-argocd-argocd
+    dir: services/devops/argocd/argocd
+
+  - <<: *default
+    name: services-devops-cloudflare
+    dir: services/devops/cloudflare
+
+  - <<: *default
+    name: services-devops-twingate
+    dir: services/devops/twingate
+
+  - <<: *default
+    name: services-devops-aws-vpc
+    dir: services/devops/aws/vpc
+
+  - <<: *default
+    name: services-devops-aws-cloudhaven-k8s-1
+    dir: services/devops/aws/cloudhaven-k8s-1
+
+  - <<: *default
+    name: services-devops-github-repos
+    dir: services/devops/github/repos
+
+  - <<: *default
+    name: services-devops-github-teams
+    dir: services/devops/github/teams
+
+  - <<: *default
+    name: services-devops-aws-state
+    dir: services/devops/aws/state

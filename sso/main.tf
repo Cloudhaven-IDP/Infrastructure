@@ -1,5 +1,7 @@
+data "aws_caller_identity" "cloudhaven" {}
+
 module "cloudhaven_admin_access" {
-  source = "../modules/identitycenter/permission_set"
+  source = "../modules/aws/iam/permission-set"
 
   permission_set_name   = "Cloudhaven-Admin"
   description           = "Admin access for Cloudhaven platform"
@@ -10,9 +12,10 @@ module "cloudhaven_admin_access" {
     "Cloudhaven-Admins"
   ]
 
-  group_memberships = jsondecode(file("${path.module}/group_memberships.json"))
+  group_memberships = yamldecode(file("${path.module}/groups.yaml"))
 
-  account_ids = [data.aws_caller_identity.current.account_id]
+
+  account_ids = [data.aws_caller_identity.cloudhaven.account_id]
 
   aws_managed_policies = [
     "arn:aws:iam::aws:policy/AdministratorAccess"

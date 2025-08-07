@@ -5,6 +5,13 @@ resource "aws_identitystore_group" "this" {
   description       = "Group for ${each.value}"
 }
 
+data "aws_identitystore_user" "this" {
+  for_each = toset(flatten(values(var.group_memberships)))
+
+  identity_store_id = local.identity_store_id
+  user_name         = each.value
+}
+
 resource "aws_identitystore_user_group_membership" "this" {
   for_each = merge([
     for group_name, users in var.group_memberships : {
@@ -19,14 +26,6 @@ resource "aws_identitystore_user_group_membership" "this" {
   identity_store_id = local.identity_store_id
   group_id          = aws_identitystore_group.this[each.value.group_name].group_id
   user_id           = data.aws_identitystore_user.this[each.value.user_name].user_id
-}
-
-
-data "aws_identitystore_user" "this" {
-  for_each = toset(flatten(values(var.group_memberships)))
-
-  identity_store_id = local.identity_store_id
-  user_name         = each.value
 }
 
 resource "aws_ssoadmin_permission_set" "this" {

@@ -1,8 +1,7 @@
 # Infrastructure
 Infrastructure as code repo
 
-Cloudhaven Infrastructure
-Cloudhaven is a GitOps-driven, cloud-native access management platform built for cost efficiency, flexibility, and transparency. We're combining EKS (for frontend microservices like the request and approval portals) with a fully serverless backend stack leveraging Step Functions, Lambda, and DynamoDB.
+Cloudhaven is a GitOps-driven, cloud-native internal developer platform built for cost efficiency, flexibility, and transparency. We're combining EKS (for frontend microservices like the request and approval portals) with a fully serverless backend stack leveraging Step Functions, Lambda, and DynamoDB.
 
 Supporting services—such as Authentik (SSO), Atlantis (IaC automation), Grafana, VictoriaMetrics, and HyperDX—are self-hosted on an EKS Kubernetes cluster. APISIX acts as our ingress gateway, replacing traditional API Gateway while allowing internal and external routing.
 

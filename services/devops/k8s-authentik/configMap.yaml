@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ???
+  namespace: authentik 
+data:
+  groups.yaml: |
+    # Example group definitions for authentik
+    # Define your groups here, e.g.:
+      version: 1
+      metadata:
+        name: "cloudhaven-groups"
+      entries:
+        - model: auth.Group
+          identifiers: { name: "guests" }
+          attrs: { name: "guests" }
+        - model: auth.Group
+          identifiers: { name: "team" }
+          attrs: { name: "team" }
+
+
+##would like to create groups outside of kuectl, use authntik tf provider

@@ -1,0 +1,25 @@
+
+provider: cloudflare
+
+env:
+  - name: CF_API_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: cloudflare-api-token
+        key: api-token
+
+domainFilters:
+  - cloudhaven.work
+
+txtOwnerId: cloudhaven-eks
+
+sources:
+  - service
+  - ingress
+  - gateway-apis
+
+policy: upsert-only
+interval: 1m
+
+# Uncomment to make all records proxied
+#   - --cloudflare-proxied

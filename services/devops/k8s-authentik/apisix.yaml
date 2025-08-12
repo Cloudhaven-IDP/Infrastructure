@@ -1,0 +1,36 @@
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: authentik-route
+  namespace: authentik
+spec:
+  http:
+    - name: authentik
+      match:
+        hosts:
+          - authentik.cloudhaven.com
+        paths:
+          - /*
+      backends:
+        - serviceName: authentik-server
+          servicePort: 80
+      plugins:
+        - name: proxy-rewrite
+          enable: true
+          config:
+            scheme: http
+
+---
+#certificate
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-cert
+  namespace: argocd
+spec:
+  secretName: argocd-tls
+  dnsNames:
+    - authentik.cloudhaven.work
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer

@@ -1,10 +1,10 @@
-server:
-  sserver:
-  service:
-    type: LoadBalancer
-    ports:
-      http: 80
-      https: 443
+service:
+  type: ClusterIP
+  ports:
+    - name: https
+      port: 443
+      targetPort: 8080
+
 configs:
   secret:
     argocdServerAdminPassword: "" # leave empty to use default auto-generated password

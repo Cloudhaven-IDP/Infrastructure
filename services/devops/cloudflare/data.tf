@@ -1,24 +1,52 @@
-locals {
-  cloudflare_api_token = data.aws_ssm_parameter.cloudflare_api_token.value
 
+
+
+
+data "aws_lb" "cloudhaven_nlb" {
+  name = "cloudhaven-nlb-lb"  
+}
+
+data "cloudflare_zone" "this" {
+  zone_id = "bd78c44dcf91a8d1510766582aac9c63"
+}
+
+locals {
+  cloudflare_zone_name = "cloudhaven.work"
+  apisix_nlb_hostname  = data.aws_lb.cloudhaven_nlb.dns_name
+  cloudhaven_hosts = jsondecode(file("${path.module}/aliases.json"))
   cloudhaven_dns_records = {
-    "atlantis" = {
+    for h in local.cloudhaven_hosts :
+    h => {
       type    = "CNAME"
-      content = "a459370b25e904b1a8681e9aa80d235f-415409132.us-east-1.elb.amazonaws.com"
-    }
-    "argocd" = {
-      type    = "CNAME"
-      content = "ad9a2370613d1483881798179597e845-1324948555.us-east-1.elb.amazonaws.com"
+      content = local.apisix_nlb_hostname
+      proxied = true
+      ttl     = 1 # Auto TTL
     }
   }
 }
 
-data "aws_ssm_parameter" "cloudflare_api_token" {
-  name            = "/cloudflare/api-token"
-  with_decryption = true
-}
+# # # data.tf
+# # locals {
+# #   cloudflare_zone_name = "cloudhaven.work"
+# #   apisix_nlb_hostname  = data.aws_lb.cloudhaven_nlb.dns_name
+# #   cloudhaven_hosts     = jsondecode(file("${path.module}/aliases.json"))
+# # }
 
-data "aws_ssm_parameter" "cloudhaven_zone_id" {
-  name            = "/cloudflare/zone-id"
-  with_decryption = true
-}
+# # # data "cloudflare_zones" "this" {
+# # #   filter {
+# # #     name = local.cloudflare_zone_name
+# # #   }
+# # # }
+
+# # locals {
+# #   zone_id = data.cloudflare_zone.this.zone_id
+# #   cloudhaven_dns_records = {
+# #     for h in local.cloudhaven_hosts :
+# #     h => {
+# #       type    = "CNAME"
+# #       content = local.apisix_nlb_hostname
+# #       proxied = true
+# #       ttl     = 1
+# #     }
+# #   }
+# # }

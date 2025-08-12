@@ -1,10 +1,13 @@
-resource "cloudflare_dns_record" "this" {
+########################
+# Records
+########################
+resource "cloudflare_dns_record" "app" {
   for_each = local.cloudhaven_dns_records
 
-  zone_id = "bd78c44dcf91a8d1510766582aac9c63"
-  name    = each.key
+  zone_id = "${data.cloudflare_zone.this.zone_id}"
+  name    = "${each.key}.${local.cloudflare_zone_name}"
   type    = each.value.type
   content = each.value.content
-  ttl     = 1
-  proxied = true
+  proxied = each.value.proxied
+  ttl     = each.value.ttl
 }

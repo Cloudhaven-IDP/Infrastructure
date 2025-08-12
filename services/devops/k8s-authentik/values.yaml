@@ -1,0 +1,77 @@
+authentik:
+  bootstrap:
+    enabled: true
+    admin:
+      username: "${admin_user}"
+      email: "${admin_email}"
+  postgresql:
+    host: authentik-postgresql
+    name: authentik
+    user: authentik
+  blueprints:
+    enabled: false
+
+server:
+  replicas: 2
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+worker:
+  replicas: 2
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+ingresses:
+  main:
+    enabled: true
+    ingressClassName: "apisix"
+    hosts:
+      - host: "${host}"
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: authentik-tls
+        hosts: ["${host}"]
+
+postgresql:
+  enabled: true
+  image:
+    tag: "16"
+  primary:
+    persistence:
+      enabled: true
+      size: "20Gi"
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "512Mi"
+  auth:
+    username: authentik
+    database: authentik
+
+redis:
+  enabled: true
+  architecture: standalone
+  master:
+    persistence:
+      enabled: true
+      size: "5Gi"
+    resources:
+      requests:
+        cpu: "50m"
+        memory: "256Mi"
+
+persistence:
+  enabled: true
+  size: "5Gi"

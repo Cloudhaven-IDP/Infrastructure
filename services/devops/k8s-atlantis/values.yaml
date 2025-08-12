@@ -1,11 +1,5 @@
 vcsSecretName: atlantis-vcs
 
-webhookSecret:
-  stringFromSecret:
-    secretName: atlantis-webhook-secret
-    secretKey: webhook-secret
-
-
 github:
   user: "cloudhaven-atlantis-bot"
   hostname: "github.com"
@@ -20,6 +14,6 @@ repoConfig: |
       allow_custom_workflows: true
 
 service:
-  type: LoadBalancer
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-scheme: internal
+  type: ClusterIP
+  port: 80          
+  targetPort: 4141  

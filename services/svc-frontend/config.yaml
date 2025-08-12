@@ -1,0 +1,4 @@
+Region: us-east-1
+Service: frontend
+Project: cloudhaven
+ManagedBy: terraform

@@ -11,18 +11,14 @@ module "vpc" {
   enable_dns_hostnames = var.enable_dns_hostnames
   enable_dns_support   = var.enable_dns_support
 
-  enable_nat_gateway = true
-  single_nat_gateway = false // one NAT per public subnet
+  # Turn off NATs
+  enable_nat_gateway = false
+  single_nat_gateway = false
 
-  public_subnet_tags = merge(
-    var.tags,
-    { "kubernetes.io/role/elb" = "1" }
-  )
+  enable_flow_log = false
 
-  private_subnet_tags = merge(
-    var.tags,
-    { "kubernetes.io/role/internal-elb" = "1" }
-  )
+  public_subnet_tags = merge(var.tags, { "kubernetes.io/role/elb" = "1" })
+  private_subnet_tags = merge(var.tags, { "kubernetes.io/role/internal-elb" = "1" })
 
   tags = var.tags
 }

@@ -1,0 +1,46 @@
+#certificate
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-cert
+  namespace: argocd
+spec:
+  secretName: argocd-tls
+  dnsNames:
+    - argocd.cloudhaven.work
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+
+---
+#https
+apiVersion: apisix.apache.org/v2
+kind: ApisixTls
+metadata:
+  name: argocd-tls
+  namespace: argocd
+spec:
+  hosts:
+    - argocd.cloudhaven.work           
+  secret:
+    name: argocd-tls                  
+    namespace: argocd
+
+---
+#apisix route
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: argocd-route
+  namespace: argocd
+spec:
+  http:
+    - name: argocd
+      match:
+        hosts:
+          - argocd.cloudhaven.work
+        paths:
+          - /
+      backends:
+        - serviceName: argocd-server
+          servicePort: 80

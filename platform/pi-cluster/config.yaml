@@ -1,0 +1,5 @@
+network: "home-network"
+managedBy: "terraform"
+project: "cloudhaven"
+region: "us-east-1"
+cluster: "afoski-pi-cluster"

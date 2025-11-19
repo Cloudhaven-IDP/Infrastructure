@@ -1,0 +1,147 @@
+###############################################
+#  TERRAFORM
+###############################################
+# Local tfstate
+*.tfstate
+*.tfstate.*
+terraform.tfstate
+terraform.tfstate.*
+
+# Crash logs
+crash.log
+crash.*.log
+
+# .terraform internal working dirs
+.terraform/
+.terraform.lock.hcl
+
+# Variable secrets (common patterns)
+*.tfvars
+*.tfvars.json
+*.auto.tfvars
+*.auto.tfvars.json
+
+# Plan files
+*.tfplan
+
+# Sensitive output files
+secrets.auto.tfvars
+override.tf
+override.tf.json
+
+###############################################
+#  PYTHON
+###############################################
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+*.dylib
+
+# Python virtual environments
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Python packaging output
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Pip / poetry / pipenv / UV cache
+pip-wheel-metadata/
+pip-log.txt
+pip-delete-this-directory.txt
+.poetry/
+pypoetry.toml.lock
+.uv/
+
+# Jupyter Notebook output
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# pytest / coverage / test artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.cache/
+
+###############################################
+#  BASH / SHELL ENV
+###############################################
+# Shell history
+.bash_history
+.zsh_history
+
+# Temporary files created by Bash scripts
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*.log
+*.out
+
+# Output artifacts
+logs/
+tmp/
+cache/
+
+###############################################
+#  OPERATING SYSTEM JUNK
+###############################################
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+###############################################
+#  EDITORS / IDEs
+###############################################
+# VS Code
+.vscode/
+.history/
+
+# JetBrains / PyCharm
+.idea/
+*.iml
+
+# Sublime
+*.sublime-project
+*.sublime-workspace
+
+###############################################
+#  DOCKER
+###############################################
+# Docker ignore-like patterns
+docker-data/
+*.tar
+
+###############################################
+#  CLOUD / MISC
+###############################################
+# Local creds or env files
+*.env
+.env.*
+.envrc
+
+# API keys
+*.key
+*.pem
+*.crt
+*.pub
+
+# Lock & temp files
+*.lock
+*.pid

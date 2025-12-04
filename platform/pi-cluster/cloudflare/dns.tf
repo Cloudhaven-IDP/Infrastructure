@@ -10,5 +10,7 @@ resource "cloudflare_record" "this" {
 locals {
   cnames = [
     "argocd",
+    "oidc",
+    "hyperdx",
   ]
 }

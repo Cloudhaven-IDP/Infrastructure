@@ -1,0 +1,4 @@
+application: "cloudhaven-agent"
+managedBy: "terraform"
+project: "cloudhaven"
+region: "us-east-1"

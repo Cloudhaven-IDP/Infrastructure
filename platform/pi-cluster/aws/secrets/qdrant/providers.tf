@@ -3,13 +3,17 @@ terraform {
     encrypt      = true
     bucket       = "cloudhaven-tf-bucket-state"
     use_lockfile = true
-    key          = "platform/pi-cluster/aws/iam/roles"
+    key          = "platform/pi-cluster/aws/secrets/qdrant"
     region       = "us-east-1"
   }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "~> 6.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.0"
     }
   }
 }

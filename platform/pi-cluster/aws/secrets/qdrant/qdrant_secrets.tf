@@ -1,12 +1,19 @@
-module "secrets_manager" {
+resource "random_password" "qdrant_api_key" {
+    length = 32
+    special = false
+}
+
+module "qdrant_secrets" {
   source = "terraform-aws-modules/secrets-manager/aws"
 
-  name                    = "cloudhaven-agent-secrets"
-  description             = "Cloudhaven Agent Secrets Manager secrets"
+  name                    = "qdrant"
+  description             = "Qdrant Secrets Manager secrets"
   recovery_window_in_days = 30
 
-  # Secret value placeholder... module wouldn't work without it
-  secret_string = jsonencode({})
+
+  secret_string = jsonencode({
+    api-key = random_password.qdrant_api_key.result
+  })
 
   create_policy       = true
   block_public_policy = true
@@ -27,6 +34,3 @@ module "secrets_manager" {
   }
 }
 
-data "aws_iam_role" "external-secrets-role" {
-  name = "external-secrets-role"
-}

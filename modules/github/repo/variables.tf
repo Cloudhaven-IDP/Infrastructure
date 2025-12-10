@@ -62,3 +62,27 @@ variable "bypass_actors" {
   default     = []
   description = "List of actors (users, teams, or integrations) that can bypass the ruleset. actor_type can be: OrganizationAdmin, RepositoryRole, Team, Integration, or RepositoryAdmin. actor_id is optional and not needed for OrganizationAdmin or RepositoryRole"
 }
+
+variable "has_issues" {
+  type        = bool
+  default     = true
+  description = "Set to true to enable the GitHub Issues features on the repository"
+}
+
+variable "has_downloads" {
+  type        = bool
+  default     = true
+  description = "Set to true to enable the GitHub Downloads features on the repository"
+}
+
+variable "has_wiki" {
+  type        = bool
+  default     = false
+  description = "Set to true to enable the GitHub Wiki features on the repository"
+}
+
+variable "has_projects" {
+  type        = bool
+  default     = false
+  description = "Set to true to enable the GitHub Projects features on the repository"
+}

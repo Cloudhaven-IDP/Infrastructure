@@ -4,17 +4,16 @@ resource "github_repository" "this" {
   visibility             = var.visibility
   auto_init              = true
   delete_branch_on_merge = true
+  has_issues             = var.has_issues
+  has_downloads          = var.has_downloads
+  has_wiki               = var.has_wiki
+  has_projects           = var.has_projects
 
   lifecycle {
     ignore_changes = [
       auto_init,
       homepage_url,
       description,
-      has_issues,
-      has_downloads,
-      has_discussions,
-      has_wiki,
-      has_projects,
       topics,
       vulnerability_alerts,
       pages,

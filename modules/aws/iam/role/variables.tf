@@ -52,10 +52,8 @@ variable "managed_policies" {
 }
 
 variable "inline_policies" {
-  type = map(object({
-    policy = string # JSON policy document
-  }))
-  description = "Map of inline policy names to policy documents"
+  type        = map(string)
+  description = "Map of inline policy names to JSON policy documents"
   default     = {}
 }
 

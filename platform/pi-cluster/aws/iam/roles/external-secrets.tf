@@ -11,24 +11,3 @@ module "external-secrets-role" {
   ]
 
 }
-
-data "aws_iam_policy_document" "external-secrets-role" {
-  statement {
-    effect  = "Allow"
-    actions = ["sts:AssumeRoleWithWebIdentity"]
-    principals {
-      type        = "Federated"
-      identifiers = [data.aws_iam_openid_connect_provider.pi-oidc.arn]
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "oidc.cloudhaven.work:sub"
-      values   = ["system:serviceaccount:operators:external-secrets"]
-    }
-    condition {
-      test     = "StringEquals"
-      variable = "oidc.cloudhaven.work:aud"
-      values   = ["sts.amazonaws.com"]
-    }
-  }
-}

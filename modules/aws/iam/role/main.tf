@@ -22,7 +22,7 @@ resource "aws_iam_role" "this" {
   description = var.description
   assume_role_policy = coalesce(
     var.assume_role_policy,
-    try(data.aws_iam_policy_document.assume_role[0].json, null)
+    try(data.aws_iam_policy_document.assume_role[0].json, null) #? need tp better this logic, gets us over then hump for now
   )
   max_session_duration  = var.max_session_duration
   force_detach_policies = var.force_detach_policies
@@ -44,7 +44,7 @@ resource "aws_iam_role_policy" "inline_policies" {
 
   name   = each.key
   role   = aws_iam_role.this.name
-  policy = each.value.policy
+  policy = each.value
 }
 
 resource "aws_iam_instance_profile" "this" {

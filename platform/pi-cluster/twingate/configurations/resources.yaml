@@ -1,0 +1,9 @@
+hyperdx:
+  port: 3000
+  alias: hyperdx.cloudhaven.work
+  is_browser_shortcut_enabled: true
+
+qdrant:
+  port: 6333
+  alias: qdrant.cloudhaven.work
+  is_browser_shortcut_enabled: true

@@ -26,7 +26,7 @@ locals {
   config = yamldecode(file("${path.module}/../../../config.yaml"))
   default_tags = {
     managedBy = local.config.managedBy
-    project   = local.config.project
+    account   = local.config.account
     region    = local.config.region
     cluster   = local.config.cluster
   }

@@ -1,45 +1,25 @@
-data "twingate_remote_network" "this" {
-  name = var.twingate_network
-}
-
-resource "twingate_connector" "this" {
-  remote_network_id = data.twingate_remote_network.this.id
-  name              = var.connector_name
-}
-
-resource "twingate_connector_tokens" "this" {
-  connector_id = twingate_connector.this.id
-}
-
 resource "helm_release" "twingate-connector" {
-  name             = "twingate-connector"
+  name             = local.release_name
   repository       = "https://twingate.github.io/helm-charts"
   chart            = "connector"
-  namespace        = "twingate-connector"
+  namespace        = var.namespace
   create_namespace = true
 
   set = [
     {
-      name  = "twingate.network"
-      value = data.twingate_remote_network.this.id
+      name  = "connector.network"
+      value = var.twingate_account
     },
     {
-      name  = "twingate.accessToken"
-      value = twingate_connector_tokens.this.access_token
-    },
-    {
-      name  = "twingate.refreshToken"
-      value = twingate_connector_tokens.this.refresh_token
-    },
-    {
-      name  = "twingate.connectorName"
-      value = var.connector_name
+      name  = "connector.existingSecret"
+      value = kubernetes_secret_v1.twingate-connector-secret.metadata[0].name
     }
   ]
 
-  values = var.values_file != null ? [file(var.values_file)] : []
+  values = var.helm_values != null ? [file(var.helm_values)] : []
 
   depends_on = [
-    twingate_connector_tokens.this
+    twingate_connector_tokens.this,
+    kubernetes_secret_v1.twingate-connector-secret
   ]
 }

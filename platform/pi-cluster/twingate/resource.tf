@@ -14,8 +14,8 @@ resource "twingate_resource" "pi_cluster_resources" {
   protocols = {
     allow_icmp = true
     tcp = {
-      policy = try(each.value.port, null) != null ? "RESTRICTED" : "ALLOW_ALL"
-      ports  = try(each.value.port, null) != null ? [tostring(each.value.port)] : []
+      policy = each.value.port != null ? "RESTRICTED" : "ALLOW_ALL"
+      ports  = each.value.port != null ? [tostring(each.value.port)] : []
     }
     udp = {
       policy = "ALLOW_ALL"

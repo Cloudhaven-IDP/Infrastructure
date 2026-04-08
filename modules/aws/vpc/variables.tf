@@ -53,6 +53,12 @@ variable "private_subnets" {
 # Optional
 #------------------------------------------------------------------------------
 
+variable "enable_nat_gateway" {
+  description = "Enable a single NAT gateway for private subnet outbound internet access (~$32/mo)"
+  type        = bool
+  default     = false
+}
+
 variable "enable_dns_support" {
   description = "Enable DNS support in the VPC"
   type        = bool

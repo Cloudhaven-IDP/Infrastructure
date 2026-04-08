@@ -16,7 +16,6 @@ data "aws_iam_policy_document" "read" {
       "dynamodb:Scan",
       "dynamodb:DescribeTable",
     ]
-
     resources = [
       module.dynamodb_table.dynamodb_table_arn,
       "${module.dynamodb_table.dynamodb_table_arn}/index/*",

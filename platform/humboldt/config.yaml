@@ -1,0 +1,6 @@
+network: "humboldt"
+managedBy: "terraform"
+account: "cloudhaven"
+region: "us-east-1"
+cluster: "humboldt"
+environment: "prod"

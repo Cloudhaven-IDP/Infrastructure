@@ -1,77 +1,89 @@
+#------------------------------------------------------------------------------
+# Required
+#------------------------------------------------------------------------------
+
 variable "role_name" {
+  description = "IAM role name"
   type        = string
-  description = "Name of the IAM role. Required if role_name_prefix is not provided."
-  default     = null
-  validation {
-    condition     = var.role_name != null
-    error_message = "Role_name must be provided"
-  }
 }
 
-variable "path" {
-  type        = string
-  description = "Path to the IAM role"
-  default     = "/"
-}
-
-variable "description" {
-  type        = string
-  description = "Description of the IAM role"
-  default     = null
-}
+#------------------------------------------------------------------------------
+# Assume role policy — provide one of: assume_role_policy or principals
+#------------------------------------------------------------------------------
 
 variable "assume_role_policy" {
+  description = "Raw JSON assume role policy document. Takes precedence over principals."
   type        = string
-  description = "JSON assume role policy document. If not provided, will be generated from principals variable. Required if principals is not provided."
   default     = null
 }
 
 variable "principals" {
+  description = "Principal block for the assume role policy. Used when assume_role_policy is not provided."
   type = object({
-    type        = string # Service, AWS, Federated, etc.
+    type        = string       # Service, AWS, Federated
     identifiers = list(string)
   })
-  description = "Principal configuration for assume role policy. Ignored if assume_role_policy is provided"
-  default     = null
-}
+  default = null
 
-variable "max_session_duration" {
-  type        = number
-  description = "Maximum session duration in seconds (3600-43200)"
-  default     = 3600
   validation {
-    condition     = var.max_session_duration >= 3600 && var.max_session_duration <= 43200
-    error_message = "Max session duration must be between 3600 and 43200 seconds"
+    condition     = var.assume_role_policy != null || var.principals != null
+    error_message = "Either assume_role_policy or principals must be provided."
   }
 }
 
+#------------------------------------------------------------------------------
+# Optional
+#------------------------------------------------------------------------------
+
+variable "description" {
+  description = "Human-readable description of the role"
+  type        = string
+  default     = null
+}
+
+variable "path" {
+  description = "IAM path for the role"
+  type        = string
+  default     = "/"
+}
+
+variable "max_session_duration" {
+  description = "Maximum session duration in seconds"
+  type        = number
+  default     = 3600
+
+  validation {
+    condition     = var.max_session_duration >= 3600 && var.max_session_duration <= 43200
+    error_message = "Must be between 3600 and 43200 seconds."
+  }
+}
+
+variable "force_detach_policies" {
+  description = "Force-detach policies when destroying the role"
+  type        = bool
+  default     = false
+}
+
 variable "managed_policies" {
+  description = "AWS managed policy names to attach (looked up by name, e.g. AmazonSSMManagedInstanceCore)"
   type        = list(string)
-  description = "List of AWS managed policy ARNs to attach"
+  default     = []
+}
+
+variable "policy_arns" {
+  description = "Policy ARNs to attach directly (customer-managed or AWS managed)"
+  type        = list(string)
   default     = []
 }
 
 variable "inline_policies" {
+  description = "Map of inline policy name → JSON policy document"
   type        = map(string)
-  description = "Map of inline policy names to JSON policy documents"
   default     = {}
-}
-
-variable "create_instance_profile" {
-  type        = bool
-  description = "Whether to create an instance profile for EC2 use cases"
-  default     = false
 }
 
 variable "tags" {
+  description = "Additional tags. Pass ManagedBy, Environment etc. from your config.yaml."
   type        = map(string)
-  description = "Tags to apply to the IAM role"
   default     = {}
 }
-
-variable "force_detach_policies" {
-  type        = bool
-  description = "Whether to force detach policies when destroying the role"
-  default     = false
-}
-

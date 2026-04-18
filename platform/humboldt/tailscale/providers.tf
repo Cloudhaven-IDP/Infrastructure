@@ -22,7 +22,7 @@ terraform {
 
 locals {
   config = yamldecode(file("${path.module}/../config.yaml"))
-
+  tailscale_api_key = data.aws_ssm_parameter.tailscale_api_key.value
   default_tags = {
     ManagedBy   = local.config.managedBy
     Account     = local.config.account
@@ -31,9 +31,9 @@ locals {
   }
 }
 
-# API token via TAILSCALE_API_KEY env var
 provider "tailscale" {
   tailnet = "nebulosa-humboldt.ts.net"
+  api_key = local.tailscale_api_key
 }
 
 provider "aws" {

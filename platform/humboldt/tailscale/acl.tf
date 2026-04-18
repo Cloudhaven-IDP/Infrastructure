@@ -8,6 +8,7 @@ resource "tailscale_acl" "this" {
       "tag:k8s-cp"        = ["autogroup:admin"]
       "tag:k8s-worker"    = ["autogroup:admin"]
       "tag:subnet-router" = ["autogroup:admin"]
+      "tag:k8s-humboldt"  = ["autogroup:admin"]
     }
 
     acls = [

@@ -1,0 +1,6 @@
+network: "nebulosa"
+managedBy: "terraform"
+account: "cloudhaven"
+region: "us-east-1"
+cluster: "nebulosa"
+environment: "prod"

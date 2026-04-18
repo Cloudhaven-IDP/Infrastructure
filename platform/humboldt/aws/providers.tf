@@ -6,6 +6,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    talos = {
+      source  = "siderolabs/talos"
+      version = "~> 0.7"
+    }
   }
 
   backend "s3" {

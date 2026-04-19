@@ -31,3 +31,9 @@ variable "additional_labels" {
   type        = map(string)
   default     = {}
 }
+
+variable "node_selector" {
+  description = "Node selector for the cloudflared pod (e.g. pin to a specific node)"
+  type        = map(string)
+  default     = {}
+}

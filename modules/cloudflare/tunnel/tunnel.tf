@@ -59,6 +59,8 @@ resource "kubernetes_deployment" "cloudflared" {
       }
 
       spec {
+        node_selector = var.node_selector
+
         container {
           name  = "cloudflared"
           image = "cloudflare/cloudflared:2025.4.0"

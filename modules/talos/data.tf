@@ -39,8 +39,22 @@ locals {
     }
   })
 
+  # Patch: OIDC service account issuer — required for IRSA
+  oidc_patch = var.service_account_issuer != "" ? yamlencode({
+    cluster = {
+      apiServer = {
+        extraArgs = {
+          service-account-issuer   = var.service_account_issuer
+          service-account-jwks-uri = "${var.service_account_issuer}/openid/v1/jwks"
+          anonymous-auth           = "true"
+        }
+      }
+    }
+  }) : null
+
   all_config_patches = concat(
     var.config_patches,
     [local.common_machine_config_patch],
+    local.oidc_patch != null ? [local.oidc_patch] : [],
   )
 }

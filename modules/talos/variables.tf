@@ -201,3 +201,9 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "service_account_issuer" {
+  description = "OIDC issuer URL for Kubernetes service account tokens (e.g. https://oidc-humboldt.cloudhaven.work). Required for IRSA."
+  type        = string
+  default     = ""
+}

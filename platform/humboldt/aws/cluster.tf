@@ -7,17 +7,15 @@ module "talos" {
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
 
-  # Single control plane for now — scale to 3 when HA is needed
+
   control_plane_instance_type = "t3.small"
   control_plane_count         = 1
 
-  # Workers — t3.medium, KEDA-managed via cluster autoscaler
   worker_instance_type = "t3.medium"
   worker_min           = 1
   worker_max           = 5
   worker_desired       = 2
 
-  # Private subnet — nodes reached via Tailscale subnet router (10.0.0.0/16)
   associate_public_ip = false
 
   # Tailscale CIDR + VPC CIDR — subnet router SNATs traffic so source IP is a VPC IP
@@ -26,6 +24,9 @@ module "talos" {
 
   # NLB off — API is internal, reached via Tailscale
   enable_nlb = false
+
+  # OIDC issuer — exposes /.well-known/openid-configuration via Cloudflare tunnel
+  service_account_issuer = "https://oidc-humboldt.cloudhaven.work"
 
   tags = {
     Cluster = local.config.cluster

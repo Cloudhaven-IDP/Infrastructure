@@ -19,6 +19,10 @@ data "aws_iam_policy_document" "tailscale_ssm" {
   }
 }
 
+data "tls_certificate" "humboldt_oidc" {
+  url = "https://oidc-humboldt.cloudhaven.work"
+}
+
 data "aws_ami" "al2023_arm" {
   most_recent = true
   owners      = ["amazon"]

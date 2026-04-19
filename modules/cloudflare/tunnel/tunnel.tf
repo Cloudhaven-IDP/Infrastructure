@@ -1,4 +1,3 @@
-
 resource "cloudflare_tunnel" "this" {
   account_id = var.cloudflare_account_id
   name       = var.tunnel_name
@@ -16,52 +15,60 @@ resource "cloudflare_tunnel_config" "this" {
         service  = ingress_rule.value.service
         hostname = ingress_rule.value.hostname
         path     = ingress_rule.value.path
+
+        dynamic "origin_request" {
+          for_each = ingress_rule.value.no_tls_verify ? [1] : []
+          content {
+            no_tls_verify = true
+          }
+        }
       }
     }
 
-    # Default catch-all rule
     ingress_rule {
       service = "http_status:404"
     }
   }
 }
 
+locals {
+  labels = merge({
+    "app.kubernetes.io/name"      = "cloudflared"
+    "app.kubernetes.io/instance"  = var.tunnel_name
+    "app.kubernetes.io/component" = "tunnel"
+  }, var.additional_labels)
+}
+
 resource "kubernetes_deployment" "cloudflared" {
   metadata {
     name      = var.tunnel_name
     namespace = var.namespace
-    labels = {
-      app = "cloudflared"
-    }
+    labels    = local.labels
   }
 
   spec {
     replicas = 1
 
     selector {
-      match_labels = {
-        app = var.tunnel_name
-      }
+      match_labels = { "app.kubernetes.io/instance" = var.tunnel_name }
     }
 
     template {
       metadata {
-        labels = {
-          app = var.tunnel_name
-        }
+        labels = local.labels
       }
 
       spec {
         container {
           name  = "cloudflared"
-          image = "cloudflare/cloudflared:latest"
+          image = "cloudflare/cloudflared:2025.4.0"
 
           args = [
             "tunnel",
             "--no-autoupdate",
             "run",
             "--token",
-            "$(TUNNEL_TOKEN)"
+            "$(TUNNEL_TOKEN)",
           ]
 
           env {
@@ -80,8 +87,6 @@ resource "kubernetes_deployment" "cloudflared" {
 
   depends_on = [
     cloudflare_tunnel_config.this,
-    cloudflare_tunnel.this,
-    kubernetes_secret.cloudflared_token
+    kubernetes_secret.cloudflared_token,
   ]
 }
-

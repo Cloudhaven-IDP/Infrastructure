@@ -4,7 +4,7 @@ resource "random_password" "tunnel_secret" {
 }
 
 resource "aws_ssm_parameter" "tunnel_secret" {
-  name  = "/cloudflare-tunnel/${var.tunnel_name}/secret"
+  name  = "/restricted/cloudflare/tunnel/${var.tunnel_name}/secret"
   type  = "SecureString"
   value = random_password.tunnel_secret.result
 }

@@ -1,4 +1,5 @@
 resource "github_repository_ruleset" "main_branch_protection" {
+  count = var.visibility == "public" ? 1 : 0
   name        = "Main Branch Protection"
   repository  = github_repository.this.name
   target      = "branch"

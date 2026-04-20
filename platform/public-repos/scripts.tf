@@ -1,7 +1,7 @@
 module "repo_scripts" {
   source         = "../../modules/github/repo/"
   name           = "scripts"
-  visibility     = "private"
+  visibility     = "public"
   description    = "Operational scripts — k3s config, AWS bootstrapping, Cloudflare setup. Used by CI/CD pipelines."
   default_branch = "main"
 

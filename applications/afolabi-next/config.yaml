@@ -1,0 +1,3 @@
+application: "afolabi-next-agent"
+managedBy: "terraform"
+region: "us-east-1"

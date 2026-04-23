@@ -12,8 +12,8 @@ variable "oidc_provider_arn" {
   type        = string
 }
 
-variable "namespace" {
-  description = "Kubernetes namespace the service account lives in"
+variable "namespaces" {
+  description = "Kubernetes namespace(s) the service account lives in — comma-separated, supports wildcards"
   type        = string
 }
 

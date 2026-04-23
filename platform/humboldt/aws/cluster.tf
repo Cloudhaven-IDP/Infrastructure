@@ -8,13 +8,13 @@ module "talos" {
   subnet_ids = module.vpc.private_subnets
 
 
-  control_plane_instance_type = "t3.small"
+  control_plane_instance_type = "t4g.small"
   control_plane_count         = 1
 
-  worker_instance_type = "t3.medium"
+  worker_instance_type = "r6g.2xlarge"
   worker_min           = 1
-  worker_max           = 5
-  worker_desired       = 2
+  worker_max           = 2
+  worker_desired       = 1
 
   associate_public_ip = false
 

@@ -180,13 +180,24 @@ variable "worker_config_patches" {
 #------------------------------------------------------------------------------
 
 variable "ami_id" {
-  description = "Override the Talos AMI. If null, latest official Sidero Labs AMI is used."
+  description = "Override the Talos AMI. If null, latest official Sidero Labs AMI is looked up for var.architecture."
   type        = string
   default     = null
 
   validation {
     condition     = var.ami_id != null ? (length(var.ami_id) > 4 && substr(var.ami_id, 0, 4) == "ami-") : true
     error_message = "Must be a valid AMI ID starting with 'ami-'."
+  }
+}
+
+variable "architecture" {
+  description = "CPU architecture for Talos AMI lookup. Must match the instance family (t4g/r6g/c6g/m6g/... → arm64; t3/r6i/c6i/m6i/... → amd64)."
+  type        = string
+  default     = "arm64"
+
+  validation {
+    condition     = contains(["amd64", "arm64"], var.architecture)
+    error_message = "architecture must be amd64 or arm64."
   }
 }
 

@@ -11,7 +11,7 @@ data "aws_ami" "talos" {
 
   owners      = ["540036508848"]
   most_recent = true
-  name_regex  = "^talos-v\\d+\\.\\d+\\.\\d+-${data.aws_availability_zones.available.id}-amd64$"
+  name_regex  = "^talos-v\\d+\\.\\d+\\.\\d+-${data.aws_availability_zones.available.id}-${var.architecture}$"
 }
 
 locals {

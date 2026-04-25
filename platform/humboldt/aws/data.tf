@@ -52,6 +52,23 @@ data "aws_iam_policy_document" "tailscale_ssm" {
   }
 }
 
+data "aws_iam_policy_document" "external_secrets_sm" {
+  statement {
+    sid    = "SecretsManagerReadWrite"
+    effect = "Allow"
+    actions = [
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:ListSecrets",
+      "secretsmanager:ListSecretVersionIds",
+      "secretsmanager:PutSecretValue",
+      "secretsmanager:UpdateSecret",
+      "secretsmanager:TagResource",
+    ]
+    resources = ["*"]
+  }
+}
+
 data "aws_iam_policy_document" "tailscale_operator_ssm" {
   statement {
     sid     = "ReadParameters"

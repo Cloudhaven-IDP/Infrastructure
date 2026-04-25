@@ -19,3 +19,14 @@ module "ebs_csi_role" {
   service_account_name = "ebs-csi-controller-sa"
   policy_arns          = ["arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"]
 }
+
+module "external_secrets_role" {
+  source = "../../../modules/aws/iam/app_role"
+
+  role_name            = "humboldt-external-secrets-operator"
+  oidc_provider_arn    = aws_iam_openid_connect_provider.humboldt.arn
+  cluster              = local.config.cluster
+  namespaces           = "external-secrets"
+  service_account_name = "external-secrets-sa"
+  inline_policy_json   = data.aws_iam_policy_document.external_secrets_sm.json
+}

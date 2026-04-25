@@ -22,8 +22,19 @@ terraform {
 
 locals {
   config = yamldecode(file("${path.module}/../config.yaml"))
+
+  default_tags = {
+    ManagedBy   = local.config.managedBy
+    Account     = local.config.account
+    Cluster     = local.config.cluster
+    Environment = local.config.environment
+  }
 }
 
 provider "aws" {
   region = local.config.region
+
+  default_tags {
+    tags = local.default_tags
+  }
 }

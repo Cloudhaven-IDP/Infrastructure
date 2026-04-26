@@ -1,4 +1,8 @@
 locals {
+  internal_services = [
+    "langfuse",
+  ]
+
   ingress_rules = [
     {
       hostname      = "oidc-nebulosa.cloudhaven.work"

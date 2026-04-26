@@ -8,12 +8,13 @@ module "dns_oidc_nebulosa" {
   proxied = true
 }
 
-module "dns_langfuse_internal" {
-  source = "../../../modules/cloudflare/dns"
+module "dns_internal_services" {
+  for_each = toset(local.internal_services)
+  source   = "../../../modules/cloudflare/dns"
 
   zone_id = module.tunnel.cloudflare_zone_id
-  name    = "langfuse.internal"
-  value   = "100.85.33.92"
+  name    = "${each.key}.internal"
+  value   = data.tailscale_device.nebulosa_internal.addresses[0]
   type    = "A"
   proxied = false
 }

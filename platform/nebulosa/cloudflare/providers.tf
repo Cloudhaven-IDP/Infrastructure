@@ -18,6 +18,10 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.0"
     }
+    tailscale = {
+      source  = "tailscale/tailscale"
+      version = "~> 0.17"
+    }
   }
 
   backend "s3" {
@@ -45,4 +49,9 @@ provider "kubernetes" {
   client_certificate     = base64decode(local.kube["client-certificate"])
   client_key             = base64decode(local.kube["client-key"])
   cluster_ca_certificate = base64decode(local.kube["cluster-ca-certificate"])
+}
+
+provider "tailscale" {
+  tailnet = "nebulosa-humboldt.ts.net"
+  api_key = data.aws_ssm_parameter.tailscale_api_key.value
 }

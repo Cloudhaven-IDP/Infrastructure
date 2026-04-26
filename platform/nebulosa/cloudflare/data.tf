@@ -3,6 +3,14 @@ data "aws_ssm_parameter" "cloudflare_api_token" {
   with_decryption = true
 }
 
+data "aws_ssm_parameter" "tailscale_api_key" {
+  name = "/restricted/tailscale/api-key"
+}
+
+data "tailscale_device" "nebulosa_internal" {
+  hostname = "nebulosa-internal"
+}
+
 data "aws_ssm_parameter" "cloudflare_account_id" {
   name            = "/cloudflare/account-id"
   with_decryption = true

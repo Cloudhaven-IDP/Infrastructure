@@ -1,6 +1,7 @@
 locals {
   system_apps = [
     "langfuse",
+    "action-scale-set",
   ]
 }
 

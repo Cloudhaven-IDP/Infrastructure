@@ -1,0 +1,8 @@
+images:
+  - name: gha-runner
+    description: GitHub Actions runner with kubectl, kustomize, helm, argocd, talosctl, tailscale, jq, yq, gh, awscli, make
+    context: gha-runner
+    dockerfile: gha-runner/Dockerfile
+    registry: ghcr.io/cloudhaven-idp
+    platforms:
+      - linux/arm64

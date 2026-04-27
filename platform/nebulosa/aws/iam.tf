@@ -1,3 +1,14 @@
+module "cert_manager_role" {
+  source = "../../../modules/aws/iam/app_role"
+
+  role_name            = "nebulosa-cert-manager"
+  oidc_provider_arn    = aws_iam_openid_connect_provider.nebulosa.arn
+  cluster              = local.config.cluster
+  namespaces           = "cert-manager"
+  service_account_name = "cert-manager"
+  inline_policy_json   = data.aws_iam_policy_document.cloudflare_ssm.json
+}
+
 module "external_secrets_role" {
   source = "../../../modules/aws/iam/app_role"
 
@@ -34,6 +45,30 @@ module "qdrant_role" {
   inline_policy_json   = data.aws_iam_policy_document.qdrant_ssm.json
 }
 
+module "grafana_role" {
+  source = "../../../modules/aws/iam/app_role"
+
+  role_name            = "nebulosa-grafana"
+  oidc_provider_arn    = aws_iam_openid_connect_provider.nebulosa.arn
+  cluster              = local.config.cluster
+  namespaces           = "observability"
+  service_account_name = "grafana-sa"
+  inline_policy_json   = data.aws_iam_policy_document.grafana_ssm.json
+}
+
+module "loki_role" {
+  source = "../../../modules/aws/iam/app_role"
+
+  role_name            = "nebulosa-loki"
+  oidc_provider_arn    = aws_iam_openid_connect_provider.nebulosa.arn
+  cluster              = local.config.cluster
+  namespaces           = "observability"
+  service_account_name = "loki-sa"
+  policy_arns = [
+    module.loki_chunks.read_write_policy_arn,
+  ]
+}
+
 module "tailscale_operator_role" {
   source = "../../../modules/aws/iam/app_role"
 
@@ -43,4 +78,15 @@ module "tailscale_operator_role" {
   namespaces           = "tailscale"
   service_account_name = "operator"
   inline_policy_json   = data.aws_iam_policy_document.tailscale_operator_ssm.json
+}
+
+module "arc_runners_role" {
+  source = "../../../modules/aws/iam/app_role"
+
+  role_name            = "nebulosa-arc-runners"
+  oidc_provider_arn    = aws_iam_openid_connect_provider.nebulosa.arn
+  cluster              = local.config.cluster
+  namespaces           = "arc-runners"
+  service_account_name = "arc-runners-sa"
+  inline_policy_json   = data.aws_iam_policy_document.arc_runners_ssm.json
 }

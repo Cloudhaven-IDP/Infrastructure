@@ -33,10 +33,10 @@ provider "aws" {
 }
 
 provider "argocd" {
-  server_addr = "argocd.cloudhaven.work:80" #techdebt pending clusterissuer deployment
+  server_addr = "argocd.internal.cloudhaven.work:80"
   plain_text  = true
   grpc_web    = true
-  auth_token  = var.argocd_token
+  auth_token  = data.aws_ssm_parameter.argocd_token.value
 }
 
 provider "kubernetes" {

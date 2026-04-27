@@ -9,3 +9,8 @@ locals {
     data.aws_ssm_parameters_by_path.nebulosa_kubeconfig.values
   )
 }
+
+data "aws_ssm_parameter" "argocd_token" {
+  name            = "/restricted/argocd/admin/token"
+  with_decryption = true
+}

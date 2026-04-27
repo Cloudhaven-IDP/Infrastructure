@@ -18,6 +18,10 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.0"
     }
+    tailscale = {
+      source  = "tailscale/tailscale"
+      version = "~> 0.17"
+    }
   }
 
   backend "s3" {
@@ -38,6 +42,11 @@ provider "aws" {
 
 provider "cloudflare" {
   api_token = data.aws_ssm_parameter.cloudflare_api_token.value
+}
+
+provider "tailscale" {
+  tailnet = "nebulosa-humboldt.ts.net"
+  api_key = data.aws_ssm_parameter.tailscale_api_key.value
 }
 
 provider "kubernetes" {

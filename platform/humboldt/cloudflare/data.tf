@@ -6,6 +6,14 @@ locals {
   kube = jsondecode(data.aws_secretsmanager_secret_version.kubeconfig.secret_string)
 }
 
+data "aws_ssm_parameter" "tailscale_api_key" {
+  name = "/restricted/tailscale/api-key"
+}
+
+data "tailscale_device" "humboldt_internal" {
+  hostname = "humboldt-internal"
+}
+
 data "aws_ssm_parameter" "cloudflare_api_token" {
   name            = "/restricted/cloudflare/api-token"
   with_decryption = true

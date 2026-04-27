@@ -1,3 +1,8 @@
+data "aws_ssm_parameter" "cloudflare_api_token" {
+  name            = "/restricted/cloudflare/api-token"
+  with_decryption = false
+}
+
 data "tls_certificate" "nebulosa_oidc" {
   url = "https://oidc-nebulosa.cloudhaven.work"
 }
@@ -53,12 +58,64 @@ data "aws_iam_policy_document" "tailscale_operator_ssm" {
   }
 }
 
+data "aws_iam_policy_document" "grafana_ssm" {
+  statement {
+    sid     = "ReadGrafanaParameters"
+    effect  = "Allow"
+    actions = ["ssm:GetParameter"]
+    resources = [
+      "arn:aws:ssm:${local.config.region}:445746982355:parameter/restricted/grafana/*",
+    ]
+  }
+
+  statement {
+    sid       = "DecryptSecureString"
+    effect    = "Allow"
+    actions   = ["kms:Decrypt"]
+    resources = ["arn:aws:kms:${local.config.region}:*:alias/aws/ssm"]
+  }
+}
+
+data "aws_iam_policy_document" "cloudflare_ssm" {
+  statement {
+    sid       = "ReadCloudflareToken"
+    effect    = "Allow"
+    actions   = ["ssm:GetParameter"]
+    resources = [data.aws_ssm_parameter.cloudflare_api_token.arn]
+  }
+
+  statement {
+    sid       = "DecryptSecureString"
+    effect    = "Allow"
+    actions   = ["kms:Decrypt"]
+    resources = ["arn:aws:kms:${local.config.region}:*:alias/aws/ssm"]
+  }
+}
+
 data "aws_iam_policy_document" "qdrant_ssm" {
   statement {
     sid       = "ReadManagementApiKey"
     effect    = "Allow"
     actions   = ["ssm:GetParameter"]
     resources = [data.aws_ssm_parameter.qdrant_management_api_key.arn]
+  }
+
+  statement {
+    sid       = "DecryptSecureString"
+    effect    = "Allow"
+    actions   = ["kms:Decrypt"]
+    resources = ["arn:aws:kms:${local.config.region}:*:alias/aws/ssm"]
+  }
+}
+
+data "aws_iam_policy_document" "arc_runners_ssm" {
+  statement {
+    sid     = "ReadGithubAppCredentials"
+    effect  = "Allow"
+    actions = ["ssm:GetParameter"]
+    resources = [
+      "arn:aws:ssm:${local.config.region}:445746982355:parameter/restricted/cloudhaven/github/arc/*",
+    ]
   }
 
   statement {

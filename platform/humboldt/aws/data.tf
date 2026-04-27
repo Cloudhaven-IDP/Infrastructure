@@ -13,6 +13,11 @@ data "aws_ssm_parameter" "tailscale_operator_client_secret" {
   with_decryption = false
 }
 
+data "aws_ssm_parameter" "cloudflare_api_token" {
+  name            = "/restricted/cloudflare/api-token"
+  with_decryption = false
+}
+
 data "tls_certificate" "humboldt_oidc" {
   url = "https://oidc-humboldt.cloudhaven.work"
 }
@@ -66,6 +71,22 @@ data "aws_iam_policy_document" "external_secrets_sm" {
       "secretsmanager:TagResource",
     ]
     resources = ["*"]
+  }
+}
+
+data "aws_iam_policy_document" "cloudflare_ssm" {
+  statement {
+    sid       = "ReadCloudflareToken"
+    effect    = "Allow"
+    actions   = ["ssm:GetParameter"]
+    resources = [data.aws_ssm_parameter.cloudflare_api_token.arn]
+  }
+
+  statement {
+    sid       = "DecryptSecureString"
+    effect    = "Allow"
+    actions   = ["kms:Decrypt"]
+    resources = ["arn:aws:kms:${local.config.region}:*:alias/aws/ssm"]
   }
 }
 

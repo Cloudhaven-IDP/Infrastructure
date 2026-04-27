@@ -1,9 +1,9 @@
 locals {
+  internal_services = [
+    "argocd",
+  ]
+
   ingress_rules = [
-    {
-      hostname = "argocd.cloudhaven.work"
-      service  = "http://argocd-server.argocd.svc.cluster.local:80"
-    },
     # OIDC discovery for AWS -> tunneled via Cloudflare
     {
       hostname      = "oidc-humboldt.cloudhaven.work"

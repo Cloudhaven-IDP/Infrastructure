@@ -19,7 +19,7 @@ module "talos" {
   associate_public_ip = false
 
   # Tailscale CIDR + VPC CIDR — subnet router SNATs traffic so source IP is a VPC IP
-  talos_api_allowed_cidrs     = ["100.64.0.0/10", "10.0.0.0/16"]
+  talos_api_allowed_cidrs      = ["100.64.0.0/10", "10.0.0.0/16"]
   kubernetes_api_allowed_cidrs = ["100.64.0.0/10", "10.0.0.0/16"]
 
   # NLB off — API is internal, reached via Tailscale

@@ -80,13 +80,13 @@ module "tailscale_operator_role" {
   inline_policy_json   = data.aws_iam_policy_document.tailscale_operator_ssm.json
 }
 
-module "arc_runners_role" {
+module "arc_role" {
   source = "../../../modules/aws/iam/app_role"
 
-  role_name            = "nebulosa-arc-runners"
+  role_name            = "nebulosa-arc"
   oidc_provider_arn    = aws_iam_openid_connect_provider.nebulosa.arn
   cluster              = local.config.cluster
-  namespaces           = "arc-runners"
-  service_account_name = "arc-runners-sa"
-  inline_policy_json   = data.aws_iam_policy_document.arc_runners_ssm.json
+  namespaces           = "arc"
+  service_account_name = "arc-sa"
+  inline_policy_json   = data.aws_iam_policy_document.arc_ssm.json
 }

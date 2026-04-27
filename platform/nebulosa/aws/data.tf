@@ -108,7 +108,7 @@ data "aws_iam_policy_document" "qdrant_ssm" {
   }
 }
 
-data "aws_iam_policy_document" "arc_runners_ssm" {
+data "aws_iam_policy_document" "arc_ssm" {
   statement {
     sid     = "ReadGithubAppCredentials"
     effect  = "Allow"

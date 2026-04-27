@@ -1,6 +1,8 @@
 locals {
   internal_services = [
     "langfuse",
+    "grafana",
+    "loki",
   ]
 
   ingress_rules = [

@@ -1,14 +1,12 @@
 name: Build base images
 
 on:
-  schedule:
-    - cron: "0 6 * * 5"
-  push:
-    branches: [main]
-    paths:
-      - "Dockerfiles/**"
-      - ".github/workflows/build-base-images.yml"
   workflow_dispatch:
+    inputs:
+      image:
+        description: "Specific image to build (default: all)"
+        required: false
+        default: "all"
 
 permissions:
   contents: read
@@ -24,30 +22,20 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v4
 
-      - name: Detect changed image dirs
-        id: filter
-        if: github.event_name == 'push'
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            gha-runner:
-              - 'Dockerfiles/gha-runner/**'
-
       - name: Compute matrix
         id: compute
         run: |
           set -eu
-          if [[ "${{ github.event_name }}" == "push" ]]; then
-            images='${{ steps.filter.outputs.changes }}'
-          else
+          if [[ "${{ inputs.image }}" == "all" ]]; then
             images=$(yq -o=json '[.images[].name]' Dockerfiles/images.yaml)
+          else
+            images='["${{ inputs.image }}"]'
           fi
           echo "images=$images" >> "$GITHUB_OUTPUT"
 
   build:
     name: Build ${{ matrix.image }}
     needs: matrix
-    if: needs.matrix.outputs.images != '[]' && needs.matrix.outputs.images != ''
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -66,21 +54,6 @@ jobs:
           echo "dockerfile=$(yq '.dockerfile' <<<"$entry")" >> "$GITHUB_OUTPUT"
           echo "registry=$(yq '.registry' <<<"$entry")" >> "$GITHUB_OUTPUT"
           echo "platforms=$(yq '.platforms | join(",")' <<<"$entry")" >> "$GITHUB_OUTPUT"
-          echo "sha=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
-          echo "date=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
-
-      - name: Compute tags
-        id: tags
-        run: |
-          set -eu
-          base="${{ steps.meta.outputs.registry }}/${{ matrix.image }}"
-          sha="${{ steps.meta.outputs.sha }}"
-          date="${{ steps.meta.outputs.date }}"
-          if [[ "${{ github.event_name }}" == "schedule" ]]; then
-            printf 'tags<<EOF\n%s:%s-%s\nEOF\n' "$base" "$sha" "$date" >> "$GITHUB_OUTPUT"
-          else
-            printf 'tags<<EOF\n%s:%s\nEOF\n' "$base" "$sha" >> "$GITHUB_OUTPUT"
-          fi
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -102,6 +75,16 @@ jobs:
           file: Dockerfiles/${{ steps.meta.outputs.dockerfile }}
           platforms: ${{ steps.meta.outputs.platforms }}
           push: true
-          tags: ${{ steps.tags.outputs.tags }}
+          tags: ${{ steps.meta.outputs.registry }}/${{ matrix.image }}:${{ github.sha }}
           cache-from: type=gha,scope=${{ matrix.image }}
           cache-to: type=gha,scope=${{ matrix.image }},mode=max
+
+      - name: Summary
+        run: |
+          {
+            echo "## Built ${{ matrix.image }}"
+            echo
+            echo "Tag: \`${{ steps.meta.outputs.registry }}/${{ matrix.image }}:${{ github.sha }}\`"
+            echo
+            echo "Update \`K8s-Bootstrap/nebulosa/arc/kustomization.yaml\` \`images:\` block \`newTag:\` to \`${{ github.sha }}\`."
+          } >> "$GITHUB_STEP_SUMMARY"

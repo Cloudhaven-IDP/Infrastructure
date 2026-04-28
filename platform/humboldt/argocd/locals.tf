@@ -1,0 +1,3 @@
+locals {
+  system_apps = []
+}

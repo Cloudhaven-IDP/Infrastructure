@@ -6,6 +6,12 @@ variable "app_name" {
   type = string
 }
 
+variable "namespace" {
+  description = "Destination namespace for the ArgoCD Application. Defaults to app_name when null."
+  type        = string
+  default     = null
+}
+
 variable "argocd_cluster" {
   type    = string
   default = "humboldt"

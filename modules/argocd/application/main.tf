@@ -16,7 +16,7 @@ resource "argocd_application" "this" {
     destination {
       server    = var.cluster == var.argocd_cluster ? "https://kubernetes.default.svc" : null
       name      = var.cluster != var.argocd_cluster ? var.cluster : null
-      namespace = "argocd"
+      namespace = coalesce(var.namespace, var.app_name)
     }
 
     sync_policy {

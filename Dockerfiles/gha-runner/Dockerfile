@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 
-ARG RUNNER_VERSION=2.321.0
+ARG RUNNER_VERSION=2.334.0
 FROM ghcr.io/actions/actions-runner:${RUNNER_VERSION}
 
 ARG TARGETARCH

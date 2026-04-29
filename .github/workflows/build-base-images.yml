@@ -27,7 +27,7 @@ jobs:
         run: |
           set -eu
           if [[ "${{ inputs.image }}" == "all" ]]; then
-            images=$(yq -o=json '[.images[].name]' Dockerfiles/images.yaml)
+            images=$(yq -I=0 -o=json '[.images[].name]' Dockerfiles/images.yaml)
           else
             images='["${{ inputs.image }}"]'
           fi

@@ -3,6 +3,7 @@ locals {
     "langfuse",
     "grafana",
     "loki",
+    "victoriametrics",
   ]
 
   ingress_rules = [

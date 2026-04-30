@@ -8,10 +8,23 @@ resource "grafana_data_source" "loki" {
     derivedFields = [
       {
         name          = "Langfuse Trace"
-        matcherRegex  = "\"langfuse_trace_id\":\"([^\"]+)\""
+        matcherRegex  = "\"trace_id\":\"([^\"]+)\""
         url           = "${local.langfuse_url}/trace/$${__value.raw}"
         datasourceUid = ""
       }
     ]
+  })
+}
+
+resource "grafana_data_source" "victoriametrics" {
+  type       = "prometheus"
+  name       = "VictoriaMetrics"
+  url        = local.victoriametrics_url
+  is_default = true
+
+  json_data_encoded = jsonencode({
+    httpMethod    = "POST"
+    timeInterval  = "30s"
+    prometheusType = "Prometheus"
   })
 }

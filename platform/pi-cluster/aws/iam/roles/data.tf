@@ -39,7 +39,11 @@ data "aws_iam_policy_document" "gha_deployer_assume_role_policy" {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
       values = [
-         "repo:Cloudhaven-IDP/cloudhaven-agent:*",
+        "repo:Cloudhaven-IDP/cloudhaven-agent:*",
+        "repo:Cloudhaven-IDP/K8s-Bootstrap:*",
+        "repo:Cloudhaven-IDP/theo:*",
+        "repo:Cloudhaven-IDP/theo-agents:*",
+        "repo:Cloudhaven-IDP/afolabi-next:*",
       ]
     }
     condition {
@@ -52,10 +56,21 @@ data "aws_iam_policy_document" "gha_deployer_assume_role_policy" {
 
 data "aws_iam_policy_document" "gha_deployer_policy" {
   statement {
-    effect  = "Allow"
+    effect    = "Allow"
+    actions   = ["ecr:*"]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "ReadKubeconfigs"
+    effect = "Allow"
     actions = [
-        "ecr:*",
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
     ]
-    resources = ["*"] #all repos is fine for now
+    resources = [
+      "arn:aws:secretsmanager:us-east-1:445746982355:secret:nebulosa/kubeconfig-*",
+      "arn:aws:secretsmanager:us-east-1:445746982355:secret:humboldt/kubeconfig-*",
+    ]
   }
 }

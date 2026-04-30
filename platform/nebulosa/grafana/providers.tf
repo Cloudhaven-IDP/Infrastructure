@@ -30,6 +30,6 @@ provider "aws" {
 }
 
 provider "grafana" {
-  url  = "http://grafana.${local.internal_domain}"
+  url  = "https://grafana.${local.internal_domain}"
   auth = "${data.aws_ssm_parameter.grafana_admin_user.value}:${data.aws_ssm_parameter.grafana_admin_password.value}"
 }

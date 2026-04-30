@@ -20,7 +20,7 @@ resource "argocd_application" "this" {
     }
 
     sync_policy {
-      sync_options = ["ServerSideApply=true"]
+      sync_options = ["ServerSideApply=true", "ServerSideDiff=true"]
     }
   }
 }

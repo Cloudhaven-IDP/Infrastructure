@@ -1,0 +1,77 @@
+name: Snapshot Talos etcd
+
+on:
+  workflow_dispatch:
+    inputs:
+      cluster:
+        description: "Cluster to snapshot (matches SSM /<cluster>/talosconfig and bucket <cluster>-talos-etcd-snapshot)"
+        required: true
+        default: humboldt
+        type: string
+  schedule:
+    - cron: "0 4 * * *"
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: snapshot-talos-etcd-${{ inputs.cluster || 'humboldt' }}
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    name: Snapshot ${{ inputs.cluster || 'humboldt' }} etcd
+    runs-on: cloudhaven-runner
+    steps:
+      - name: Resolve cluster identifiers
+        id: cluster
+        shell: bash
+        run: |
+          set -euo pipefail
+          NAME="${{ inputs.cluster }}"
+          : "${NAME:=humboldt}"
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "bucket=${NAME}-talos-etcd-snapshot" >> "$GITHUB_OUTPUT"
+          echo "param=/${NAME}/talosconfig" >> "$GITHUB_OUTPUT"
+          echo "key=$(date -u +%Y-%m-%dT%H-%M-%SZ).snap" >> "$GITHUB_OUTPUT"
+
+      - name: Assume gha-deployer role
+        uses: Cloudhaven-IDP/Actions/aws-oidc-assume@main
+
+      - name: Fetch talosconfig from SSM
+        shell: bash
+        run: |
+          set -euo pipefail
+          aws ssm get-parameter \
+            --name "${{ steps.cluster.outputs.param }}" \
+            --with-decryption \
+            --query Parameter.Value \
+            --output text > /tmp/talosconfig
+          chmod 600 /tmp/talosconfig
+          echo "TALOSCONFIG=/tmp/talosconfig" >> "$GITHUB_ENV"
+
+      - name: Snapshot etcd
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="/tmp/${{ steps.cluster.outputs.key }}"
+          talosctl etcd snapshot "$OUT"
+          echo "SIZE=$(du -h "$OUT" | cut -f1)" >> "$GITHUB_ENV"
+          echo "OUTFILE=$OUT" >> "$GITHUB_ENV"
+
+      - name: Upload snapshot to S3
+        shell: bash
+        run: |
+          set -euo pipefail
+          aws s3 cp "$OUTFILE" "s3://${{ steps.cluster.outputs.bucket }}/${{ steps.cluster.outputs.key }}"
+
+      - name: Write summary
+        shell: bash
+        run: |
+          {
+            echo "## Snapshotted ${{ steps.cluster.outputs.name }} etcd"
+            echo
+            echo "- Object: \`s3://${{ steps.cluster.outputs.bucket }}/${{ steps.cluster.outputs.key }}\`"
+            echo "- Size: $SIZE"
+          } >> "$GITHUB_STEP_SUMMARY"

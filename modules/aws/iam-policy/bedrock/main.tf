@@ -1,3 +1,11 @@
+locals {
+  foundation_model_arns = flatten([
+    for region in var.regions : [
+      for model in var.allowed_models : "arn:aws:bedrock:${region}::foundation-model/${model}"
+    ]
+  ])
+}
+
 data "aws_iam_policy_document" "this" {
   statement {
     sid    = "InvokeModels"
@@ -5,12 +13,10 @@ data "aws_iam_policy_document" "this" {
     actions = [
       "bedrock:InvokeModel",
       "bedrock:InvokeModelWithResponseStream",
+      "bedrock:Converse",
+      "bedrock:ConverseStream",
     ]
-    resources = length(var.model_ids) == 0 ? ["*"] : flatten([
-      for region in var.regions : [
-        for id in var.model_ids : "arn:aws:bedrock:${region}::foundation-model/${id}"
-      ]
-    ])
+    resources = length(local.foundation_model_arns) + length(var.inference_profile_arns) > 0 ? concat(local.foundation_model_arns, var.inference_profile_arns) : ["*"]
   }
 }
 

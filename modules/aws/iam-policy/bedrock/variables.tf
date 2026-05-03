@@ -9,22 +9,22 @@ variable "description" {
   default     = "Bedrock InvokeModel access"
 }
 
-variable "model_ids" {
-  description = "Foundation model IDs to allow (e.g. anthropic.claude-haiku-4-5-20251001-v1:0). Empty list = Resource: \"*\" — relies on AWS account-level model access list as the gate."
+variable "allowed_models" {
+  description = "Foundation model IDs the policy permits (e.g. anthropic.claude-haiku-4-5-20251001-v1:0). Empty means any model. Account-level Bedrock model access is the underlying gate either way."
   type        = list(string)
   default     = []
 }
 
 variable "regions" {
-  description = "Bedrock regions where the listed models are reachable. Ignored when model_ids is empty."
+  description = "Bedrock regions where the allowed_models are reachable. Ignored when allowed_models is empty."
   type        = list(string)
   default     = ["us-east-1"]
 }
 
-variable "allow_list_models" {
-  description = "Also grant ListFoundationModels + GetFoundationModel — useful for callers that need to discover available models at runtime."
-  type        = bool
-  default     = false
+variable "inference_profile_arns" {
+  description = "Inference profile ARNs to scope this policy to. AWS requires permissions on both the profile and its underlying foundation models, so pass allowed_models alongside this when using cross-region profiles."
+  type        = list(string)
+  default     = []
 }
 
 variable "tags" {

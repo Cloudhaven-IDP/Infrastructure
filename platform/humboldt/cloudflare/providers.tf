@@ -50,8 +50,8 @@ provider "tailscale" {
 }
 
 provider "kubernetes" {
-  host                   = local.kube.host
-  client_certificate     = base64decode(local.kube.client_certificate_data)
-  client_key             = base64decode(local.kube.client_key_data)
-  cluster_ca_certificate = base64decode(local.kube.cluster_ca_certificate_data)
+  host                   = local.kube["host"]
+  client_certificate     = base64decode(local.kube["client-certificate"])
+  client_key             = base64decode(local.kube["client-key"])
+  cluster_ca_certificate = base64decode(local.kube["cluster-ca-certificate"])
 }

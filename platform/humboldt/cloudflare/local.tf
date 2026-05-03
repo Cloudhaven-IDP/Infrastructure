@@ -1,6 +1,8 @@
 locals {
   internal_services = [
     "argocd",
+    "auth",
+    "temporal"
   ]
 
   ingress_rules = [

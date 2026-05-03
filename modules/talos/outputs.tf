@@ -20,6 +20,11 @@ output "kubeconfig_secret_arn" {
   value       = aws_secretsmanager_secret.kubeconfig.arn
 }
 
+output "talosconfig_param_name" {
+  description = "SSM parameter name (e.g. /humboldt/talosconfig) — pass to aws ssm get-parameter --name"
+  value       = aws_ssm_parameter.talosconfig.name
+}
+
 output "control_plane_ips" {
   description = "Private IPs of control plane nodes"
   value       = module.control_plane[*].private_ip

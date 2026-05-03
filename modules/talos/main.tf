@@ -269,3 +269,12 @@ resource "aws_secretsmanager_secret_version" "kubeconfig" {
   })
 }
 
+resource "aws_ssm_parameter" "talosconfig" {
+  name        = "/${var.cluster_name}/talosconfig"
+  description = "Talosconfig for ${var.cluster_name} (talosctl client config — endpoints + nodes baked in)"
+  type        = "SecureString"
+  value       = data.talos_client_configuration.this.talos_config
+
+  tags = local.tags
+}
+

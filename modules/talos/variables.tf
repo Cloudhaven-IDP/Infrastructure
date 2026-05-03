@@ -218,3 +218,9 @@ variable "service_account_issuer" {
   type        = string
   default     = ""
 }
+
+variable "external_cloud_provider" {
+  description = "Enable Kubernetes external cloud provider (kubelet --cloud-provider=external). Nodes will be tainted node.cloudprovider.kubernetes.io/uninitialized:NoSchedule until a cloud-controller-manager removes the taint, so deploy CCM first."
+  type        = bool
+  default     = false
+}

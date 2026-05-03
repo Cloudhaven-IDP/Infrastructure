@@ -18,6 +18,18 @@ module "talos" {
 
   associate_public_ip = false
 
+  config_patches = [
+    yamlencode({
+      cluster = {
+        network = {
+          cni = {
+            name = "none"
+          }
+        }
+      }
+    })
+  ]
+
   # Tailscale CIDR + VPC CIDR — subnet router SNATs traffic so source IP is a VPC IP
   talos_api_allowed_cidrs      = ["100.64.0.0/10", "10.0.0.0/16"]
   kubernetes_api_allowed_cidrs = ["100.64.0.0/10", "10.0.0.0/16"]
@@ -27,6 +39,8 @@ module "talos" {
 
   # OIDC issuer — exposes /.well-known/openid-configuration via Cloudflare tunnel
   service_account_issuer = "https://oidc-humboldt.cloudhaven.work"
+
+  external_cloud_provider = true
 
   tags = {
     Cluster = local.config.cluster

@@ -52,9 +52,18 @@ locals {
     }
   }) : null
 
+  external_cloud_provider_patch = var.external_cloud_provider ? yamlencode({
+    cluster = {
+      externalCloudProvider = {
+        enabled = true
+      }
+    }
+  }) : null
+
   all_config_patches = concat(
     var.config_patches,
     [local.common_machine_config_patch],
     local.oidc_patch != null ? [local.oidc_patch] : [],
+    local.external_cloud_provider_patch != null ? [local.external_cloud_provider_patch] : [],
   )
 }

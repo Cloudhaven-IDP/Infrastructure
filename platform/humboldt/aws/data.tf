@@ -108,3 +108,17 @@ data "aws_iam_policy_document" "tailscale_operator_ssm" {
     resources = ["arn:aws:kms:${local.config.region}:*:alias/aws/ssm"]
   }
 }
+
+data "aws_iam_policy_document" "cloud_controller_manager" {
+  statement {
+    sid    = "NodeController"
+    effect = "Allow"
+    actions = [
+      "ec2:DescribeInstances",
+      "ec2:DescribeInstanceTopology",
+      "ec2:DescribeRegions",
+      "ec2:DescribeAvailabilityZones",
+    ]
+    resources = ["*"]
+  }
+}

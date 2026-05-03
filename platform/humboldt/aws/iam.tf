@@ -20,6 +20,17 @@ module "ebs_csi_role" {
   policy_arns          = ["arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"]
 }
 
+module "ccm_role" {
+  source = "../../../modules/aws/iam/app_role"
+
+  role_name            = "humboldt-ccm"
+  oidc_provider_arn    = aws_iam_openid_connect_provider.humboldt.arn
+  cluster              = "humboldt"
+  namespaces           = "kube-system"
+  service_account_name = "cloud-controller-manager"
+  inline_policy_json   = data.aws_iam_policy_document.cloud_controller_manager.json
+}
+
 module "cert_manager_role" {
   source = "../../../modules/aws/iam/app_role"
 
@@ -40,4 +51,14 @@ module "external_secrets_role" {
   namespaces           = "external-secrets"
   service_account_name = "external-secrets-sa"
   inline_policy_json   = data.aws_iam_policy_document.external_secrets_sm.json
+}
+
+module "authentik_role" {
+  source = "../../../modules/aws/iam/app_role"
+
+  role_name            = "humboldt-authentik"
+  oidc_provider_arn    = aws_iam_openid_connect_provider.humboldt.arn
+  cluster              = local.config.cluster
+  namespaces           = "authentik"
+  service_account_name = "authentik"
 }

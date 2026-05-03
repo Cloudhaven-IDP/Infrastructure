@@ -4,11 +4,24 @@ locals {
   default_lifecycle_rules = [{
     id                            = "noncurrent-version-cleanup"
     status                        = "Enabled"
+    transition                    = null
+    expiration                    = null
     noncurrent_version_transition = { noncurrent_days = 30, storage_class = "GLACIER_IR" }
     noncurrent_version_expiration = { noncurrent_days = 365 }
   }]
 
-  effective_lifecycle_rules = var.lifecycle_rules == null ? local.default_lifecycle_rules : var.lifecycle_rules
+  supplied_lifecycle_rules = var.lifecycle_rules == null ? [] : [
+    for r in var.lifecycle_rules : {
+      id                            = r.id
+      status                        = r.status
+      transition                    = try(r.transition, null)
+      expiration                    = try(r.expiration, null)
+      noncurrent_version_transition = try(r.noncurrent_version_transition, null)
+      noncurrent_version_expiration = try(r.noncurrent_version_expiration, null)
+    }
+  ]
+
+  effective_lifecycle_rules = length(local.supplied_lifecycle_rules) > 0 ? local.supplied_lifecycle_rules : local.default_lifecycle_rules
 }
 
 resource "aws_s3_bucket" "this" {
